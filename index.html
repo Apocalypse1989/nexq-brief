@@ -18,13 +18,13 @@
 
     body {
       font-family: 'Barlow', sans-serif;
-      background: #090909;
+      background: var(--bg);
       color: #ccc;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── CSS VARIABLES ────────────────────────────────────────── */
+    /* ── CSS VARIABLES — DARK (default) ──────────────────────── */
     :root {
       --gold:        #C8A96E;
       --gold-hover:  #D4B880;
@@ -41,14 +41,60 @@
       --text-2:      #CCCCCC;
       --text-3:      #888888;
       --text-4:      #555555;
+      --input-bg:    #111111;
+      --input-focus-bg: #131100;
+      --header-bg:   #090909;
+      --info-text:   #C4A870;
+      --upload-bg:   #0e0e0e;
     }
+
+    /* ── CSS VARIABLES — LIGHT ────────────────────────────────── */
+    body.light {
+      --gold:        #A07840;
+      --gold-hover:  #B8904A;
+      --gold-dim:    #C8A96E;
+      --gold-bg:     #FDF8F0;
+      --gold-border: rgba(160,120,64,0.25);
+      --bg:          #F7F5F2;
+      --bg-1:        #FFFFFF;
+      --bg-2:        #F2EFE9;
+      --bg-3:        #EAE6DE;
+      --border:      #E0DAD0;
+      --border-2:    #D0C8BC;
+      --text-1:      #1A1410;
+      --text-2:      #3A332A;
+      --text-3:      #6B5E4E;
+      --text-4:      #9A8A78;
+      --input-bg:    #FFFFFF;
+      --input-focus-bg: #FFFDF8;
+      --header-bg:   #F7F5F2;
+      --info-text:   #8A6830;
+      --upload-bg:   #FAFAF8;
+    }
+
+    body.light { background: var(--bg); color: var(--text-2); }
+    body.light .header { background: var(--header-bg); }
+    body.light .logo-nex { color: var(--text-1); }
+    body.light input[type="text"],
+    body.light input[type="email"],
+    body.light input[type="tel"],
+    body.light input[type="url"],
+    body.light textarea,
+    body.light select { background: var(--input-bg); color: var(--text-1); }
+    body.light input:focus,
+    body.light textarea:focus { background: var(--input-focus-bg); }
+    body.light .upload-zone { background: var(--upload-bg); }
+    body.light .info-card p { color: var(--info-text); }
+    body.light .check-item { background: var(--bg-1); }
+    body.light .check-item.selected { background: var(--gold-bg); }
+    body.light .footer { background: var(--bg); }
 
     /* ── HEADER ───────────────────────────────────────────────── */
     .header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: #090909;
+      background: var(--header-bg);
       border-bottom: 1px solid var(--border);
       padding: 0 32px;
       height: 60px;
@@ -109,7 +155,25 @@
     }
     .save-btn:hover { color: var(--gold); }
 
-    /* ── PROGRESS BAR ─────────────────────────────────────────── */
+    /* ── THEME TOGGLE ─────────────────────────────────────────── */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      background: none;
+      border: 1px solid var(--border-2);
+      border-radius: 20px;
+      padding: 5px 12px 5px 8px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-4);
+      transition: border-color 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .theme-toggle:hover { border-color: var(--gold); color: var(--gold); }
+    .theme-icon { font-size: 13px; line-height: 1; }
     .progress-track {
       height: 2px;
       background: var(--border);
@@ -285,7 +349,7 @@
     textarea,
     select {
       width: 100%;
-      background: var(--bg-1);
+      background: var(--input-bg);
       border: 1px solid var(--border-2);
       color: var(--text-1);
       font-family: 'Barlow', sans-serif;
@@ -314,7 +378,7 @@
     textarea:focus,
     select:focus {
       border-color: var(--gold);
-      background: #131100;
+      background: var(--input-focus-bg);
     }
 
     textarea {
@@ -420,7 +484,7 @@
       text-align: center;
       cursor: pointer;
       transition: border-color 0.15s, background 0.15s;
-      background: var(--bg-1);
+      background: var(--upload-bg);
       margin-top: 8px;
     }
 
@@ -718,6 +782,10 @@
     </a>
     <div class="header-right">
       <span class="step-indicator" id="stepIndicator">Overview</span>
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+        <span class="theme-icon" id="themeIcon">☀</span>
+        <span id="themeLabel">Light mode</span>
+      </button>
       <button class="save-btn" id="saveBtn" onclick="saveProgress()">Save progress</button>
     </div>
   </header>
@@ -1415,7 +1483,7 @@
         </div>
 
         <div class="confirm-contact">
-          Any questions? Email <a href="mailto:hello@nexq.co.uk">hello@nexq.co.uk</a><br>
+          Any questions? Email <a href="/cdn-cgi/l/email-protection#d1b9b4bdbdbe91bfb4a9a0ffb2beffa4ba"><span class="__cf_email__" data-cfemail="0b636e6767644b656e737a256864257e60">[email&#160;protected]</span></a><br>
           or call <a href="tel:+441234567890">+44 (0)1234 567 890</a>
         </div>
       </div>
@@ -1431,7 +1499,31 @@
     <div class="footer-text">Industrial websites built in 48 hours · nexq.co.uk</div>
   </footer>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // ── THEME TOGGLE ───────────────────────────────────────────
+    let isLight = false;
+
+    function toggleTheme() {
+      isLight = !isLight;
+      document.body.classList.toggle('light', isLight);
+      document.getElementById('themeIcon').textContent = isLight ? '◑' : '☀';
+      document.getElementById('themeLabel').textContent = isLight ? 'Dark mode' : 'Light mode';
+      try { localStorage.setItem('nexq_brief_theme', isLight ? 'light' : 'dark'); } catch(e) {}
+    }
+
+    // Restore saved theme preference
+    (function initTheme() {
+      try {
+        const saved = localStorage.getItem('nexq_brief_theme');
+        if (saved === 'light') {
+          isLight = true;
+          document.body.classList.add('light');
+          document.getElementById('themeIcon').textContent = '◑';
+          document.getElementById('themeLabel').textContent = 'Dark mode';
+        }
+      } catch(e) {}
+    })();
+
     // ── STATE ──────────────────────────────────────────────────
     let currentScreen = 0;
     const TOTAL_SECTIONS = 8;
@@ -1613,13 +1705,4 @@
       // Navigate to confirmation
       goTo(9);
 
-      // Update confirmation name
-      const company = formData.companyName || formData.contactName || '';
-      if (company) {
-        document.getElementById('confirmName').textContent = company + '.';
-      }
-    }
-  </script>
-
-</body>
-</html>
+      // Up
