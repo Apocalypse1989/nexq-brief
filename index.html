@@ -74,7 +74,6 @@
 
     body.light { background: var(--bg); color: var(--text-2); }
     body.light .header { background: var(--header-bg); }
-    body.light .logo-nex { color: var(--text-1); }
     body.light input[type="text"],
     body.light input[type="email"],
     body.light input[type="tel"],
@@ -111,22 +110,16 @@
       flex-shrink: 0;
     }
 
-    .logo-nex {
-      font-family: 'Inter', sans-serif;
-      font-size: 22px;
-      font-weight: 900;
-      color: #FFFFFF;
-      letter-spacing: -0.04em;
-      line-height: 1;
+    .logo-img {
+      height: 24px;
+      width: auto;
+      display: block;
+      filter: invert(1);
+      transition: filter 0.2s;
     }
 
-    .logo-q {
-      font-family: 'Inter', sans-serif;
-      font-size: 22px;
-      font-weight: 900;
-      color: var(--gold);
-      letter-spacing: -0.04em;
-      line-height: 1;
+    body.light .logo-img {
+      filter: none;
     }
 
     .header-right {
@@ -780,7 +773,7 @@
   <!-- HEADER -->
   <header class="header">
     <a class="logo" href="#">
-      <span class="logo-nex">NEX</span><span class="logo-q">Q</span>
+      <img src="nexq-logo.png" alt="NexQ" class="logo-img">
     </a>
     <div class="header-right">
       <span class="step-indicator" id="stepIndicator">Overview</span>
@@ -1504,7 +1497,7 @@
   <!-- FOOTER -->
   <footer class="footer" id="mainFooter">
     <div class="footer-logo">
-      <span class="logo-nex" style="font-size: 18px;">NEX</span><span class="logo-q" style="font-size: 18px;">Q</span>
+      <img src="nexq-logo.png" alt="NexQ" class="logo-img" style="height: 18px;">
     </div>
     <div class="footer-text">Professional websites built in 48 hours · nexq.co.uk</div>
   </footer>
