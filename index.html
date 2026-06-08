@@ -752,6 +752,24 @@
     /* ── SPINNER ──────────────────────────────────────────────── */
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ── CONFETTI ─────────────────────────────────────────────── */
+    .confetti-piece {
+      position: fixed;
+      top: -12px;
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: 9999;
+      animation: confettiFall 2s ease-in forwards;
+    }
+
+    @keyframes confettiFall {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+      80%  { opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
     /* ── SCROLLBAR ────────────────────────────────────────────── */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
@@ -844,7 +862,7 @@
       </div>
 
       <div class="field">
-        <label class="field-label">What does your business do?</label>
+        <label class="field-label">Tell us about your business in your own words</label>
         <textarea id="businessDesc" placeholder="Describe it as if you're explaining to a friend. Keep it simple — we'll write the professional copy."></textarea>
       </div>
 
@@ -862,17 +880,6 @@
       <div class="field">
         <label class="field-label">Where are you based and where do you work?</label>
         <input type="text" id="location" placeholder="e.g. Birmingham, working across the Midlands and South">
-      </div>
-
-      <div class="field-row">
-        <div class="field">
-          <label class="field-label">Registered in</label>
-          <input type="text" id="jurisdiction" placeholder="e.g. England and Wales">
-        </div>
-        <div class="field">
-          <label class="field-label">Companies House number</label>
-          <input type="text" id="companyNumber" placeholder="e.g. 12345678">
-        </div>
       </div>
 
       <div class="nav">
@@ -918,8 +925,8 @@
       </div>
 
       <div class="field">
-        <label class="field-label">Why do clients choose you over your competitors?</label>
-        <textarea id="differentiators" placeholder="What do clients say they like about working with you? What makes you different?" style="min-height: 90px;"></textarea>
+        <label class="field-label">What do clients say when they recommend you to someone else?</label>
+        <textarea id="differentiators" placeholder="Their exact words if you can remember them — this becomes your best headline copy" style="min-height: 90px;"></textarea>
       </div>
 
       <div class="nav">
@@ -1404,21 +1411,26 @@
     <section class="screen" id="screen-8">
       <div class="section-label">Section 8 of 8</div>
       <h2 class="screen-title">Anything else?</h2>
-      <p class="screen-hint">Your chance to tell us anything we haven't asked. This is often where the most useful detail comes from.</p>
+      <p class="screen-hint">The best brief answers we've ever received came from this screen. Don't rush it.</p>
 
       <div class="field">
-        <label class="field-label">What makes your business stand out?</label>
-        <textarea id="standout" placeholder="Something you're particularly proud of, a unique capability, a notable client, a record you hold..." style="min-height: 100px;"></textarea>
+        <label class="field-label">If your website was a person, how would they come across?</label>
+        <textarea id="brandPersonality" placeholder="e.g. Knowledgeable and direct, warm and approachable, premium and no-nonsense — how should a visitor feel?" style="min-height: 100px;"></textarea>
       </div>
 
       <div class="field">
-        <label class="field-label">What do you most want to fix or improve with your web presence?</label>
-        <textarea id="improve" placeholder="e.g. nobody can find you on Google, current site looks outdated, you lose work because clients can't check your credentials..." style="min-height: 90px;"></textarea>
+        <label class="field-label">What's one thing clients say about you that you wish more people knew?</label>
+        <textarea id="hiddenUSP" placeholder="What do your best clients always say when they recommend you? What do you take for granted that actually makes you different?" style="min-height: 90px;"></textarea>
+      </div>
+
+      <div class="field">
+        <label class="field-label">What's one thing about your business that, if a client understood it properly, they'd never go anywhere else?</label>
+        <textarea id="keyInsight" placeholder="Take your time with this one. It's the most important answer in the whole brief." style="min-height: 120px;"></textarea>
       </div>
 
       <div class="field">
         <label class="field-label">Any other notes for us?</label>
-        <textarea id="otherNotes" placeholder="Anything at all — no detail is too small" style="min-height: 80px;"></textarea>
+        <textarea id="otherNotes" placeholder="Anything at all — a concern, a detail, something you're excited about, something you're worried about. No detail is too small." style="min-height: 80px;"></textarea>
       </div>
 
       <div class="nav">
@@ -1547,6 +1559,24 @@
       }
     })();
 
+    // ── CONFETTI ────────────────────────────────────────────────
+    function launchConfetti() {
+      const colours = ['#C8A96E', '#E8D49E', '#FFFFFF'];
+      const count = 40;
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.background = colours[Math.floor(Math.random() * colours.length)];
+        el.style.animationDelay = (Math.random() * 0.6) + 's';
+        el.style.animationDuration = (1.4 + Math.random() * 0.8) + 's';
+        el.style.width = (8 + Math.random() * 6) + 'px';
+        el.style.height = (8 + Math.random() * 6) + 'px';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 2500);
+      }
+    }
+
     // ── NAVIGATION ─────────────────────────────────────────────
     function goTo(n) {
       document.getElementById('screen-' + currentScreen).classList.remove('active');
@@ -1554,6 +1584,7 @@
       document.getElementById('screen-' + n).classList.add('active');
       updateProgress();
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (n === 9) launchConfetti();
     }
 
     function updateProgress() {
@@ -1657,7 +1688,7 @@
     // ── COLLECT FORM DATA ──────────────────────────────────────
     function collectFormData() {
       const ids = [
-        'companyName','businessDesc','yearsTrading','teamSize','location','jurisdiction','companyNumber',
+        'companyName','businessDesc','yearsTrading','teamSize','location',
         'idealCustomers','targetWork','contractValue','competitors','differentiators',
         'services','priorityServices','accreditations','otherSectors','awards',
         'currentSite','cta','designRefs','designAvoid','colours','style',
@@ -1665,7 +1696,7 @@
         'domainName','registrar','preferredDomain','notificationEmail',
         'contactName','contactRole','contactEmail','contactPhone','bestContact',
         'companyPhone','companyEmail','companyAddress','tradingAddress',
-        'standout','improve','otherNotes'
+        'brandPersonality','hiddenUSP','keyInsight','otherNotes'
       ];
       const data = {};
       ids.forEach(id => {
