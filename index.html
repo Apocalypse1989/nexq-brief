@@ -13,9 +13,7 @@
 
     /* ── RESET & BASE ─────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { font-size: 16px; scroll-behavior: smooth; }
-
     body {
       font-family: 'Inter', sans-serif;
       background: var(--bg);
@@ -81,9 +79,8 @@
     body.light textarea,
     body.light select { background: var(--input-bg); color: var(--text-1); }
     body.light input:focus,
-    body.light textarea:focus { background: var(--input-focus-bg); }
-    body.light .upload-zone { background: var(--upload-bg); }
-    body.light .info-card p { color: var(--info-text); }
+    body.light textarea:focus,
+    body.light select:focus { background: var(--input-focus-bg); }
     body.light .check-item { background: var(--bg-1); }
     body.light .check-item.selected { background: var(--gold-bg); }
     body.light .footer { background: var(--bg); }
@@ -118,9 +115,7 @@
       transition: filter 0.2s;
     }
 
-    body.light .logo-img {
-      filter: none;
-    }
+    body.light .logo-img { filter: none; }
 
     .header-right {
       display: flex;
@@ -136,19 +131,6 @@
       color: var(--text-4);
     }
 
-    .save-btn {
-      font-size: 13px;
-      color: var(--text-4);
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      transition: color 0.15s;
-      padding: 4px 0;
-    }
-    .save-btn:hover { color: var(--gold); }
-
-    /* ── THEME TOGGLE ─────────────────────────────────────────── */
     .theme-toggle {
       display: flex;
       align-items: center;
@@ -167,6 +149,7 @@
     }
     .theme-toggle:hover { border-color: var(--gold); color: var(--gold); }
     .theme-icon { font-size: 13px; line-height: 1; }
+
     .progress-track {
       height: 2px;
       background: var(--border);
@@ -215,10 +198,7 @@
       margin-bottom: 28px;
     }
 
-    .personalised-tag strong {
-      color: var(--gold);
-      font-weight: 600;
-    }
+    .personalised-tag strong { color: var(--gold); font-weight: 600; }
 
     .badge {
       display: inline-block;
@@ -272,6 +252,8 @@
       font-style: italic;
     }
 
+    body.light .info-card p { color: var(--info-text); }
+
     .stats {
       display: flex;
       gap: 36px;
@@ -323,9 +305,7 @@
     }
 
     /* ── FORM ELEMENTS ────────────────────────────────────────── */
-    .field {
-      margin-bottom: 20px;
-    }
+    .field { margin-bottom: 20px; }
 
     .field-label {
       display: block;
@@ -358,20 +338,17 @@
       -webkit-appearance: none;
     }
 
-    input[type="text"]::placeholder,
-    input[type="email"]::placeholder,
-    input[type="tel"]::placeholder,
-    input[type="url"]::placeholder,
-    textarea::placeholder {
-      color: var(--text-4);
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23555' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+      cursor: pointer;
     }
 
-    input[type="text"]:focus,
-    input[type="email"]:focus,
-    input[type="tel"]:focus,
-    input[type="url"]:focus,
-    textarea:focus,
-    select:focus {
+    input::placeholder, textarea::placeholder { color: var(--text-4); }
+
+    input:focus, textarea:focus, select:focus {
       border-color: var(--gold);
       background: var(--input-focus-bg);
     }
@@ -388,11 +365,9 @@
       gap: 16px;
     }
 
-    @media (max-width: 480px) {
-      .field-row { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 480px) { .field-row { grid-template-columns: 1fr; } }
 
-    /* ── CHECKBOX GRID ────────────────────────────────────────── */
+    /* ── CHECKBOX / RADIO GRID ───────────────────────────────── */
     .checkbox-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -400,14 +375,11 @@
       margin-top: 4px;
     }
 
-    .checkbox-grid.cols-3 {
-      grid-template-columns: 1fr 1fr 1fr;
-    }
+    .checkbox-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .checkbox-grid.cols-1 { grid-template-columns: 1fr; }
 
     @media (max-width: 480px) {
-      .checkbox-grid, .checkbox-grid.cols-3 {
-        grid-template-columns: 1fr;
-      }
+      .checkbox-grid, .checkbox-grid.cols-3 { grid-template-columns: 1fr; }
     }
 
     .check-item {
@@ -424,15 +396,8 @@
       -webkit-user-select: none;
     }
 
-    .check-item:hover {
-      border-color: var(--border-2);
-      background: var(--bg-2);
-    }
-
-    .check-item.selected {
-      border-color: var(--gold);
-      background: var(--gold-bg);
-    }
+    .check-item:hover { border-color: var(--border-2); background: var(--bg-2); }
+    .check-item.selected { border-color: var(--gold); background: var(--gold-bg); }
 
     .check-box {
       width: 17px;
@@ -446,10 +411,7 @@
       transition: all 0.15s;
     }
 
-    .check-item.selected .check-box {
-      background: var(--gold);
-      border-color: var(--gold);
-    }
+    .check-item.selected .check-box { background: var(--gold); border-color: var(--gold); }
 
     .check-tick {
       display: none;
@@ -470,103 +432,6 @@
     }
 
     .check-item.selected .check-text { color: var(--gold); }
-
-    /* ── UPLOAD ZONE ──────────────────────────────────────────── */
-    .upload-zone {
-      border: 1px dashed var(--border-2);
-      border-radius: 5px;
-      padding: 28px 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: border-color 0.15s, background 0.15s;
-      background: var(--upload-bg);
-      margin-top: 8px;
-    }
-
-    .upload-zone:hover {
-      border-color: var(--gold-dim);
-      background: var(--bg-2);
-    }
-
-    .upload-zone.dragover {
-      border-color: var(--gold);
-      background: var(--gold-bg);
-    }
-
-    .upload-icon {
-      font-size: 24px;
-      margin-bottom: 8px;
-      color: var(--text-4);
-    }
-
-    .upload-text {
-      font-size: 13px;
-      color: var(--text-4);
-      line-height: 1.5;
-    }
-
-    .upload-text span {
-      color: var(--gold);
-      font-weight: 500;
-    }
-
-    .upload-accepted {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 8px;
-      font-size: 11px;
-      color: var(--text-4);
-      letter-spacing: 0.06em;
-    }
-
-    .upload-accepted span {
-      background: var(--bg-2);
-      border: 1px solid var(--border);
-      padding: 3px 8px;
-      border-radius: 3px;
-    }
-
-    /* ── FILE PREVIEW ─────────────────────────────────────────── */
-    .file-preview {
-      display: none;
-      align-items: center;
-      gap: 12px;
-      background: var(--gold-bg);
-      border: 1px solid var(--gold-border);
-      padding: 12px 16px;
-      border-radius: 5px;
-      margin-top: 8px;
-    }
-
-    .file-preview.visible { display: flex; }
-
-    .file-preview-icon {
-      font-size: 20px;
-      flex-shrink: 0;
-    }
-
-    .file-preview-name {
-      font-size: 13px;
-      color: var(--gold);
-      flex: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .file-remove {
-      background: none;
-      border: none;
-      color: var(--text-4);
-      cursor: pointer;
-      font-size: 18px;
-      line-height: 1;
-      padding: 0 4px;
-      transition: color 0.15s;
-    }
-    .file-remove:hover { color: #FF5555; }
 
     /* ── DIVIDER ──────────────────────────────────────────────── */
     .divider {
@@ -605,18 +470,10 @@
       white-space: nowrap;
     }
 
-    .btn-primary:hover {
-      background: var(--gold-hover);
-      border-color: var(--gold-hover);
-    }
-
-    .btn-primary:active {
-      transform: scale(0.98);
-    }
-
-    .btn-primary svg {
-      flex-shrink: 0;
-    }
+    .btn-primary:hover { background: var(--gold-hover); border-color: var(--gold-hover); }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary svg { flex-shrink: 0; }
 
     .btn-secondary {
       display: inline-flex;
@@ -635,11 +492,7 @@
       white-space: nowrap;
     }
 
-    .btn-secondary:hover {
-      border-color: var(--text-4);
-      color: var(--text-2);
-      background: var(--bg-1);
-    }
+    .btn-secondary:hover { border-color: var(--text-4); color: var(--text-2); background: var(--bg-1); }
 
     .btn-submit {
       display: inline-flex;
@@ -659,12 +512,23 @@
       transition: background 0.15s, transform 0.1s;
     }
 
-    .btn-submit:hover {
-      background: var(--gold-hover);
-      border-color: var(--gold-hover);
+    .btn-submit:hover { background: var(--gold-hover); border-color: var(--gold-hover); }
+    .btn-submit:active { transform: scale(0.98); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── VALIDATION ───────────────────────────────────────────── */
+    .field-error {
+      font-size: 12px;
+      color: #FF5555;
+      margin-top: 6px;
+      display: none;
     }
 
-    .btn-submit:active { transform: scale(0.98); }
+    .field-error.visible { display: block; }
+
+    input.invalid, textarea.invalid {
+      border-color: #FF5555 !important;
+    }
 
     /* ── CONFIRMATION SCREEN ──────────────────────────────────── */
     .confirm-center { text-align: center; padding-top: 32px; }
@@ -706,14 +570,7 @@
     }
 
     .tl-content { padding-top: 6px; }
-
-    .tl-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-1);
-      margin-bottom: 4px;
-    }
-
+    .tl-title { font-size: 15px; font-weight: 600; color: var(--text-1); margin-bottom: 4px; }
     .tl-desc { font-size: 13px; color: var(--text-4); line-height: 1.5; }
 
     .confirm-contact {
@@ -722,11 +579,7 @@
       line-height: 1.7;
     }
 
-    .confirm-contact a {
-      color: var(--gold);
-      text-decoration: none;
-    }
-
+    .confirm-contact a { color: var(--gold); text-decoration: none; }
     .confirm-contact a:hover { text-decoration: underline; }
 
     /* ── FOOTER ───────────────────────────────────────────────── */
@@ -739,15 +592,7 @@
       margin-top: 40px;
     }
 
-    .footer-logo {
-      display: flex;
-      align-items: center;
-    }
-
-    .footer-text {
-      font-size: 12px;
-      color: var(--text-4);
-    }
+    .footer-text { font-size: 12px; color: var(--text-4); }
 
     /* ── SPINNER ──────────────────────────────────────────────── */
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -793,7 +638,7 @@
 
   <!-- HEADER -->
   <header class="header">
-    <a class="logo" href="#">
+    <a class="logo" href="https://nexq.co.uk">
       <img src="nexq-logo.png" alt="NexQ" class="logo-img">
     </a>
     <div class="header-right">
@@ -802,7 +647,6 @@
         <span class="theme-icon" id="themeIcon">☀</span>
         <span id="themeLabel">Light mode</span>
       </button>
-      <button class="save-btn" id="saveBtn" onclick="saveProgress()">Save progress</button>
     </div>
   </header>
 
@@ -816,70 +660,102 @@
 
     <!-- ── SCREEN 0: WELCOME ──────────────────────────────────── -->
     <section class="screen active" id="screen-0">
-      <div class="personalised-tag">
+      <div class="personalised-tag" id="personalisedTag" style="display:none">
         Prepared for <strong id="clientNameTag">your business</strong>
       </div>
       <div class="badge">Website Brief</div>
       <h1 class="welcome-title">
-        Welcome,<br>
-        <span id="clientDisplayName">let's get started.</span>
+        Tell us about<br>
+        <span>your business.</span>
       </h1>
-      <p class="welcome-sub">We're looking forward to building your website. This brief takes around 10 minutes and makes sure we capture everything we need to build something exceptional.</p>
+      <p class="welcome-sub">We'll handle everything else — copy, design, build. Your first draft is ready in 48 hours.</p>
       <div class="info-card">
-        <p>No trick questions. Just tell us about your business in plain English — we handle everything else. If you're not sure about something, leave it blank and we'll talk it through on our call.</p>
+        <p>No trick questions. Just tell us about your business in plain English. If you're unsure about anything, leave it blank — we'll talk it through.</p>
       </div>
       <div class="stats">
         <div>
-          <div class="stat-num">8</div>
-          <div class="stat-label">Sections</div>
+          <div class="stat-num">3</div>
+          <div class="stat-label">Short steps</div>
         </div>
         <div>
-          <div class="stat-num">~10</div>
+          <div class="stat-num">~5</div>
           <div class="stat-label">Minutes</div>
         </div>
         <div>
           <div class="stat-num">48hr</div>
-          <div class="stat-label">Build time</div>
+          <div class="stat-label">First draft</div>
         </div>
       </div>
       <button class="btn-primary" onclick="goTo(1)">
-        Start your brief
+        Start
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
     </section>
 
-    <!-- ── SCREEN 1: YOUR BUSINESS ────────────────────────────── -->
+    <!-- ── SCREEN 1: CONTACT (lead capture) ──────────────────── -->
     <section class="screen" id="screen-1">
-      <div class="section-label">Section 1 of 8</div>
-      <h2 class="screen-title">Your Business</h2>
-      <p class="screen-hint">Tell us about your company in your own words. We'll turn it into professional copy.</p>
-
-      <div class="field">
-        <label class="field-label">Company name *</label>
-        <input type="text" id="companyName" placeholder="e.g. Hartley & Associates Ltd" required>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Tell us about your business in your own words</label>
-        <textarea id="businessDesc" placeholder="Describe it as if you're explaining to a friend. Keep it simple — we'll write the professional copy."></textarea>
-      </div>
+      <div class="section-label">Step 1 of 3</div>
+      <h2 class="screen-title">First, about you.</h2>
+      <p class="screen-hint">So we know who to send your draft to.</p>
 
       <div class="field-row">
         <div class="field">
-          <label class="field-label">Years trading</label>
-          <input type="text" id="yearsTrading" placeholder="e.g. 14 years">
+          <label class="field-label" for="contactName">Your name *</label>
+          <input type="text" id="contactName" placeholder="First and last name" autocomplete="name" required>
+          <div class="field-error" id="err-contactName">Please enter your name</div>
         </div>
         <div class="field">
-          <label class="field-label">Team size</label>
-          <input type="text" id="teamSize" placeholder="e.g. 45 employees">
+          <label class="field-label" for="contactPhone">Phone number *</label>
+          <input type="tel" id="contactPhone" placeholder="07700 000000" autocomplete="tel" required>
+          <div class="field-error" id="err-contactPhone">Please enter a phone number</div>
         </div>
       </div>
 
       <div class="field">
-        <label class="field-label">Where are you based and where do you work?</label>
-        <input type="text" id="location" placeholder="e.g. Birmingham, working across the Midlands and South">
+        <label class="field-label" for="contactEmail">Email address *</label>
+        <input type="email" id="contactEmail" placeholder="you@yourcompany.co.uk" autocomplete="email" required>
+        <div class="field-error" id="err-contactEmail">Please enter a valid email address</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">What kind of business are you? *</label>
+        <div class="checkbox-grid" id="tradeGrid" style="margin-top: 8px;">
+          <div class="check-item" data-group="trade" data-value="Plumber / Gas Engineer" onclick="toggleRadio(this)">
+            <div class="check-box"><div class="check-tick"></div></div>
+            <span class="check-text">Plumber / Gas Engineer</span>
+          </div>
+          <div class="check-item" data-group="trade" data-value="Electrician" onclick="toggleRadio(this)">
+            <div class="check-box"><div class="check-tick"></div></div>
+            <span class="check-text">Electrician</span>
+          </div>
+          <div class="check-item" data-group="trade" data-value="HVAC / Heating Engineer" onclick="toggleRadio(this)">
+            <div class="check-box"><div class="check-tick"></div></div>
+            <span class="check-text">HVAC / Heating Engineer</span>
+          </div>
+          <div class="check-item" data-group="trade" data-value="Builder / Contractor" onclick="toggleRadio(this)">
+            <div class="check-box"><div class="check-tick"></div></div>
+            <span class="check-text">Builder / Contractor</span>
+          </div>
+          <div class="check-item" data-group="trade" data-value="Healthcare / Clinic" onclick="toggleRadio(this)">
+            <div class="check-box"><div class="check-tick"></div></div>
+            <span class="check-text">Healthcare / Clinic</span>
+          </div>
+          <div class="check-item" data-group="trade" data-value="Estate Agent / Property" onclick="toggleRadio(this)">
+            <div class="check-box"><div class="check-tick"></div></div>
+            <span class="check-text">Estate Agent / Property</span>
+          </div>
+          <div class="check-item" data-group="trade" data-value="Consultant / Professional" onclick="toggleRadio(this)">
+            <div class="check-box"><div class="check-tick"></div></div>
+            <span class="check-text">Consultant / Professional</span>
+          </div>
+          <div class="check-item" data-group="trade" data-value="Other" onclick="toggleRadio(this)">
+            <div class="check-box"><div class="check-tick"></div></div>
+            <span class="check-text">Other</span>
+          </div>
+        </div>
+        <div class="field-error" id="err-tradeType">Please select a business type</div>
       </div>
 
       <div class="nav">
@@ -889,7 +765,7 @@
           </svg>
           Back
         </button>
-        <button class="btn-primary" onclick="goTo(2)">
+        <button class="btn-primary" onclick="nextFromScreen1()">
           Continue
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
             <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -898,35 +774,49 @@
       </div>
     </section>
 
-    <!-- ── SCREEN 2: YOUR CUSTOMERS ───────────────────────────── -->
+    <!-- ── SCREEN 2: YOUR BUSINESS ────────────────────────────── -->
     <section class="screen" id="screen-2">
-      <div class="section-label">Section 2 of 8</div>
-      <h2 class="screen-title">Your Customers</h2>
-      <p class="screen-hint">The better we understand who you're selling to, the better your website will work for them.</p>
+      <div class="section-label">Step 2 of 3</div>
+      <h2 class="screen-title">Your business.</h2>
+      <p class="screen-hint">Plain English is fine — we write the professional copy from this.</p>
 
       <div class="field">
-        <label class="field-label">Who are your ideal customers?</label>
-        <textarea id="idealCustomers" placeholder="e.g. main contractors, housing developers, local councils, facilities managers..." style="min-height: 90px;"></textarea>
+        <label class="field-label" for="companyName">Company / trading name *</label>
+        <input type="text" id="companyName" placeholder="e.g. Hartley Plumbing Ltd" autocomplete="organization" required>
+        <div class="field-error" id="err-companyName">Please enter your company name</div>
       </div>
 
       <div class="field">
-        <label class="field-label">What kind of work do you most want to win?</label>
-        <textarea id="targetWork" placeholder="Be specific — what are the jobs that are most valuable to your business right now?" style="min-height: 90px;"></textarea>
+        <label class="field-label" for="location">Where are you based and where do you work?</label>
+        <input type="text" id="location" placeholder="e.g. Birmingham — covering the Midlands">
       </div>
 
       <div class="field">
-        <label class="field-label">Typical contract value (rough range)</label>
-        <input type="text" id="contractValue" placeholder="e.g. £50k–£500k — helps us pitch your credibility at the right level">
+        <label class="field-label" for="businessDesc">Describe what you do in a few sentences</label>
+        <textarea id="businessDesc" placeholder="Describe it like you're explaining to a friend. Don't worry about how it sounds — we'll turn it into copy."></textarea>
       </div>
 
       <div class="field">
-        <label class="field-label">Name 2–3 competitors (website addresses if known)</label>
-        <textarea id="competitors" placeholder="e.g. Jones Groundworks — www.jonesgroundworks.co.uk" style="min-height: 80px;"></textarea>
+        <label class="field-label">What do you want your website to do?</label>
+        <div class="checkbox-grid cols-3" style="margin-top: 8px;">
+          <div class="check-item" data-group="goal" onclick="toggleRadio(this)">
+            <div class="check-box"><div class="check-tick"></div></div>
+            <span class="check-text">Get phone calls</span>
+          </div>
+          <div class="check-item" data-group="goal" onclick="toggleRadio(this)">
+            <div class="check-box"><div class="check-tick"></div></div>
+            <span class="check-text">Get form enquiries</span>
+          </div>
+          <div class="check-item" data-group="goal" onclick="toggleRadio(this)">
+            <div class="check-box"><div class="check-tick"></div></div>
+            <span class="check-text">Both</span>
+          </div>
+        </div>
       </div>
 
       <div class="field">
-        <label class="field-label">What do clients say when they recommend you to someone else?</label>
-        <textarea id="differentiators" placeholder="Their exact words if you can remember them — this becomes your best headline copy" style="min-height: 90px;"></textarea>
+        <label class="field-label" for="currentSite">Current website (if you have one)</label>
+        <input type="url" id="currentSite" placeholder="e.g. www.yourcompany.co.uk">
       </div>
 
       <div class="nav">
@@ -936,7 +826,7 @@
           </svg>
           Back
         </button>
-        <button class="btn-primary" onclick="goTo(3)">
+        <button class="btn-primary" onclick="nextFromScreen2()">
           Continue
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
             <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -945,157 +835,22 @@
       </div>
     </section>
 
-    <!-- ── SCREEN 3: SERVICES ──────────────────────────────────── -->
+    <!-- ── SCREEN 3: YOUR WEBSITE ─────────────────────────────── -->
     <section class="screen" id="screen-3">
-      <div class="section-label">Section 3 of 8</div>
-      <h2 class="screen-title">Services & Accreditations</h2>
-      <p class="screen-hint">List everything you offer. Don't worry how it sounds — we'll write the copy.</p>
+      <div class="section-label">Step 3 of 3</div>
+      <h2 class="screen-title">Your website.</h2>
+      <p class="screen-hint">A few quick preferences and we have everything we need to start.</p>
 
       <div class="field">
-        <label class="field-label">Your main services (one per line)</label>
-        <textarea id="services" placeholder="Groundworks&#10;Drainage&#10;Concrete works&#10;Site clearance&#10;..." style="min-height: 150px;"></textarea>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Which services do you most want to promote?</label>
-        <textarea id="priorityServices" placeholder="Your biggest earners or the ones you most want enquiries for" style="min-height: 80px;"></textarea>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Accreditations & certifications</label>
-        <textarea id="accreditations" placeholder="e.g. ISO 9001, ISO 27001, FCA Regulated, CHAS, Constructionline, RIBA, CIOB, ICF, BACP..." style="min-height: 80px;"></textarea>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Sectors you work in — select all that apply</label>
-        <div class="checkbox-grid" id="sectorGrid" style="margin-top: 12px;">
-          <div class="check-item" data-group="sector" onclick="toggleCheck(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Professional Services</span>
-          </div>
-          <div class="check-item" data-group="sector" onclick="toggleCheck(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Construction & Civil Engineering</span>
-          </div>
-          <div class="check-item" data-group="sector" onclick="toggleCheck(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Healthcare & Wellness</span>
-          </div>
-          <div class="check-item" data-group="sector" onclick="toggleCheck(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Technology & SaaS</span>
-          </div>
-          <div class="check-item" data-group="sector" onclick="toggleCheck(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Retail & E-commerce</span>
-          </div>
-          <div class="check-item" data-group="sector" onclick="toggleCheck(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Finance & Legal</span>
-          </div>
-          <div class="check-item" data-group="sector" onclick="toggleCheck(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Hospitality & Leisure</span>
-          </div>
-          <div class="check-item" data-group="sector" onclick="toggleCheck(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Energy & Renewables</span>
-          </div>
-          <div class="check-item" data-group="sector" onclick="toggleCheck(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Manufacturing & Engineering</span>
-          </div>
-          <div class="check-item" data-group="sector" onclick="toggleCheck(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Transport & Logistics</span>
-          </div>
-          <div class="check-item" data-group="sector" onclick="toggleCheck(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Education & Training</span>
-          </div>
-          <div class="check-item" data-group="sector" onclick="toggleCheck(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Public Sector & Non-profit</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="field" style="margin-top: 4px;">
-        <label class="field-label">Other sectors not listed above</label>
-        <input type="text" id="otherSectors" placeholder="Any sectors not listed above">
-      </div>
-
-      <div class="field">
-        <label class="field-label">Awards, memberships or affiliations</label>
-        <input type="text" id="awards" placeholder="e.g. CIPD member, FSB member, industry body, trade association, approved supplier lists">
-      </div>
-
-      <div class="nav">
-        <button class="btn-secondary" onclick="goTo(2)">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M13 8H3M7 12l-4-4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Back
-        </button>
-        <button class="btn-primary" onclick="goTo(4)">
-          Continue
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-      </div>
-    </section>
-
-    <!-- ── SCREEN 4: YOUR WEBSITE ──────────────────────────────── -->
-    <section class="screen" id="screen-4">
-      <div class="section-label">Section 4 of 8</div>
-      <h2 class="screen-title">Your Website</h2>
-      <p class="screen-hint">What you need and what you want it to achieve.</p>
-
-      <div class="field">
-        <label class="field-label">Current website address (if you have one)</label>
-        <input type="url" id="currentSite" placeholder="e.g. www.yourcompany.co.uk">
-      </div>
-
-      <div class="field">
-        <label class="field-label">What should visitors do when they land on your site?</label>
-        <input type="text" id="cta" placeholder="e.g. call us, fill in an enquiry form, request a quote">
-      </div>
-
-      <div class="field">
-        <label class="field-label">Websites you like the look or feel of</label>
-        <textarea id="designRefs" placeholder="Doesn't need to be in your industry — just sites that feel right. Include web addresses." style="min-height: 80px;"></textarea>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Any websites you definitely don't want to look like</label>
-        <input type="text" id="designAvoid" placeholder="Optional">
-      </div>
-
-      <div class="field">
-        <label class="field-label">Preferred colour scheme (if you have one)</label>
-        <input type="text" id="colours" placeholder="Leave blank and we'll design something that suits your industry">
-      </div>
-
-      <div class="field">
-        <label class="field-label">What style or feel should the site have?</label>
-        <input type="text" id="style" placeholder="e.g. bold and confident, professional and warm, clean and minimal, premium and dark">
-      </div>
-
-      <div class="field">
-        <label class="field-label">Features you need — select all that apply</label>
-        <div class="checkbox-grid" style="margin-top: 12px;">
+        <label class="field-label">Features you need — tick all that apply</label>
+        <div class="checkbox-grid" style="margin-top: 8px;">
           <div class="check-item" onclick="toggleCheck(this)">
             <div class="check-box"><div class="check-tick"></div></div>
             <span class="check-text">Contact / enquiry form</span>
           </div>
           <div class="check-item" onclick="toggleCheck(this)">
             <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Project portfolio gallery</span>
-          </div>
-          <div class="check-item" onclick="toggleCheck(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Accreditation badges</span>
+            <span class="check-text">Project portfolio / gallery</span>
           </div>
           <div class="check-item" onclick="toggleCheck(this)">
             <div class="check-box"><div class="check-tick"></div></div>
@@ -1103,7 +858,7 @@
           </div>
           <div class="check-item" onclick="toggleCheck(this)">
             <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Capability statement page</span>
+            <span class="check-text">Accreditation badges</span>
           </div>
           <div class="check-item" onclick="toggleCheck(this)">
             <div class="check-box"><div class="check-tick"></div></div>
@@ -1115,174 +870,17 @@
           </div>
           <div class="check-item" onclick="toggleCheck(this)">
             <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Industries we serve page</span>
-          </div>
-          <div class="check-item" onclick="toggleCheck(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
             <span class="check-text">Google Maps</span>
           </div>
           <div class="check-item" onclick="toggleCheck(this)">
             <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Careers / vacancies page</span>
-          </div>
-          <div class="check-item" onclick="toggleCheck(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Downloadable PDF documents</span>
-          </div>
-          <div class="check-item" onclick="toggleCheck(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Cookie consent banner</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="nav">
-        <button class="btn-secondary" onclick="goTo(3)">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M13 8H3M7 12l-4-4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Back
-        </button>
-        <button class="btn-primary" onclick="goTo(5)">
-          Continue
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-      </div>
-    </section>
-
-    <!-- ── SCREEN 5: CONTENT & ASSETS ─────────────────────────── -->
-    <section class="screen" id="screen-5">
-      <div class="section-label">Section 5 of 8</div>
-      <h2 class="screen-title">Your Content</h2>
-      <p class="screen-hint">Tell us what you have — we'll work with whatever you can give us.</p>
-
-      <div class="field">
-        <label class="field-label">Company logo</label>
-        <div class="checkbox-grid cols-3" style="margin-top: 8px; margin-bottom: 16px;">
-          <div class="check-item" data-group="logo" onclick="toggleRadio(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Yes, I'll send it</span>
-          </div>
-          <div class="check-item" data-group="logo" onclick="toggleRadio(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Need one designed</span>
-          </div>
-          <div class="check-item" data-group="logo" onclick="toggleRadio(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">In progress</span>
-          </div>
-        </div>
-
-        <div class="upload-zone"
-             id="logoUploadZone"
-             onclick="document.getElementById('logoFileInput').click()"
-             ondragover="event.preventDefault(); this.classList.add('dragover')"
-             ondragleave="this.classList.remove('dragover')"
-             ondrop="handleDrop(event, 'logo')">
-          <div class="upload-icon">↑</div>
-          <div class="upload-text"><span>Click to upload logo</span> or drag and drop</div>
-          <div class="upload-accepted">
-            <span>PNG</span><span>SVG</span><span>JPG</span><span>PDF</span>
-          </div>
-        </div>
-        <div class="file-preview" id="logoPreview">
-          <div class="file-preview-icon">📎</div>
-          <span class="file-preview-name" id="logoFileName"></span>
-          <button class="file-remove" onclick="removeFile('logo')" title="Remove">×</button>
-        </div>
-        <input type="file" id="logoFileInput" accept=".png,.svg,.jpg,.jpeg,.pdf" style="display:none" onchange="handleFileSelect(this, 'logo')">
-      </div>
-
-      <div class="field">
-        <label class="field-label">Site photography or project photos</label>
-        <div class="checkbox-grid cols-3" style="margin-top: 8px; margin-bottom: 16px;">
-          <div class="check-item" data-group="photos" onclick="toggleRadio(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Yes, I'll send them</span>
-          </div>
-          <div class="check-item" data-group="photos" onclick="toggleRadio(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Some available</span>
-          </div>
-          <div class="check-item" data-group="photos" onclick="toggleRadio(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">None available</span>
-          </div>
-        </div>
-        <div class="upload-zone"
-             id="photosUploadZone"
-             onclick="document.getElementById('photosFileInput').click()"
-             ondragover="event.preventDefault(); this.classList.add('dragover')"
-             ondragleave="this.classList.remove('dragover')"
-             ondrop="handleDrop(event, 'photos')">
-          <div class="upload-icon">↑</div>
-          <div class="upload-text"><span>Click to upload photos</span> or drag and drop</div>
-          <div class="upload-accepted">
-            <span>JPG</span><span>PNG</span><span>HEIC</span>
-          </div>
-        </div>
-        <div class="file-preview" id="photosPreview">
-          <div class="file-preview-icon">📷</div>
-          <span class="file-preview-name" id="photosFileName"></span>
-          <button class="file-remove" onclick="removeFile('photos')" title="Remove">×</button>
-        </div>
-        <input type="file" id="photosFileInput" accept=".jpg,.jpeg,.png,.heic" multiple style="display:none" onchange="handleFileSelect(this, 'photos')">
-      </div>
-
-      <div class="field">
-        <label class="field-label">Do you have existing written content?</label>
-        <div class="checkbox-grid cols-3" style="margin-top: 8px;">
-          <div class="check-item" data-group="content" onclick="toggleRadio(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Yes, I'll send it</span>
-          </div>
-          <div class="check-item" data-group="content" onclick="toggleRadio(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Write from scratch</span>
-          </div>
-          <div class="check-item" data-group="content" onclick="toggleRadio(this)">
-            <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Mix of both</span>
+            <span class="check-text">Online booking / calendar</span>
           </div>
         </div>
       </div>
 
       <div class="field">
-        <label class="field-label">Customer reviews or testimonials</label>
-        <input type="text" id="reviews" placeholder="e.g. Google reviews, Trustpilot, LinkedIn, emails from clients">
-      </div>
-
-      <div class="field">
-        <label class="field-label">Notable projects or case studies to feature</label>
-        <textarea id="caseStudies" placeholder="Brief description of 1–3 projects you're proud of — client type, what you did, outcome" style="min-height: 90px;"></textarea>
-      </div>
-
-      <div class="nav">
-        <button class="btn-secondary" onclick="goTo(4)">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M13 8H3M7 12l-4-4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Back
-        </button>
-        <button class="btn-primary" onclick="goTo(6)">
-          Continue
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-      </div>
-    </section>
-
-    <!-- ── SCREEN 6: DOMAIN & TECHNICAL ───────────────────────── -->
-    <section class="screen" id="screen-6">
-      <div class="section-label">Section 6 of 8</div>
-      <h2 class="screen-title">Domain & Technical</h2>
-      <p class="screen-hint">How we'll get your site online. We handle all the technical side — just let us know where you are.</p>
-
-      <div class="field">
-        <label class="field-label">Do you already own a domain name?</label>
+        <label class="field-label">Do you have a domain name already?</label>
         <div class="checkbox-grid cols-3" style="margin-top: 8px;">
           <div class="check-item" data-group="domain" onclick="toggleRadio(this)">
             <div class="check-box"><div class="check-tick"></div></div>
@@ -1290,7 +888,7 @@
           </div>
           <div class="check-item" data-group="domain" onclick="toggleRadio(this)">
             <div class="check-box"><div class="check-tick"></div></div>
-            <span class="check-text">Need a new one</span>
+            <span class="check-text">No, need one</span>
           </div>
           <div class="check-item" data-group="domain" onclick="toggleRadio(this)">
             <div class="check-box"><div class="check-tick"></div></div>
@@ -1300,148 +898,41 @@
       </div>
 
       <div class="field">
-        <label class="field-label">Domain address (if you have one)</label>
-        <input type="text" id="domainName" placeholder="e.g. hartleyassociates.co.uk">
+        <label class="field-label">Preferred style</label>
+        <div class="checkbox-grid" style="margin-top: 8px;">
+          <div class="check-item" data-group="style" onclick="toggleRadio(this)">
+            <div class="check-box"><div class="check-tick"></div></div>
+            <span class="check-text">Bold &amp; dark</span>
+          </div>
+          <div class="check-item" data-group="style" onclick="toggleRadio(this)">
+            <div class="check-box"><div class="check-tick"></div></div>
+            <span class="check-text">Clean &amp; light</span>
+          </div>
+          <div class="check-item" data-group="style" onclick="toggleRadio(this)">
+            <div class="check-box"><div class="check-tick"></div></div>
+            <span class="check-text">Warm &amp; professional</span>
+          </div>
+          <div class="check-item" data-group="style" onclick="toggleRadio(this)">
+            <div class="check-box"><div class="check-tick"></div></div>
+            <span class="check-text">Not sure — surprise me</span>
+          </div>
+        </div>
       </div>
 
       <div class="field">
-        <label class="field-label">Where is your domain registered? (registrar name)</label>
-        <input type="text" id="registrar" placeholder="e.g. GoDaddy, 123-reg, Namecheap, 1&1">
-      </div>
-
-      <div class="field">
-        <label class="field-label">Preferred domain if purchasing new (your 1st and 2nd choice)</label>
-        <input type="text" id="preferredDomain" placeholder="e.g. hartleyassociates.co.uk — or smithscivils.co.uk">
-      </div>
-
-      <div class="field">
-        <label class="field-label">Email address for contact form notifications *</label>
-        <input type="email" id="notificationEmail" placeholder="Where should website enquiries be sent?" required>
+        <label class="field-label" for="otherNotes">Anything else you'd like us to know? <span style="color:var(--text-4);font-size:11px;font-style:italic;letter-spacing:0;">(optional)</span></label>
+        <textarea id="otherNotes" placeholder="A concern, something you're excited about, an example site you love — no detail is too small." style="min-height: 90px;"></textarea>
       </div>
 
       <div class="nav">
-        <button class="btn-secondary" onclick="goTo(5)">
+        <button class="btn-secondary" onclick="goTo(2)">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
             <path d="M13 8H3M7 12l-4-4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
           Back
         </button>
-        <button class="btn-primary" onclick="goTo(7)">
-          Continue
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-      </div>
-    </section>
-
-    <!-- ── SCREEN 7: CONTACT DETAILS ──────────────────────────── -->
-    <section class="screen" id="screen-7">
-      <div class="section-label">Section 7 of 8</div>
-      <h2 class="screen-title">Your Contact Details</h2>
-      <p class="screen-hint">So we can reach you and set everything up correctly on the site.</p>
-
-      <div class="field-row">
-        <div class="field">
-          <label class="field-label">Your full name *</label>
-          <input type="text" id="contactName" placeholder="First and last name" required>
-        </div>
-        <div class="field">
-          <label class="field-label">Your role</label>
-          <input type="text" id="contactRole" placeholder="e.g. Director, Owner, MD">
-        </div>
-      </div>
-
-      <div class="field-row">
-        <div class="field">
-          <label class="field-label">Your email *</label>
-          <input type="email" id="contactEmail" placeholder="your@email.com" required>
-        </div>
-        <div class="field">
-          <label class="field-label">Your phone *</label>
-          <input type="tel" id="contactPhone" placeholder="07700 000000" required>
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Best way and time to reach you</label>
-        <input type="text" id="bestContact" placeholder="e.g. phone before 9am, email any time, WhatsApp preferred">
-      </div>
-
-      <hr class="divider">
-
-      <div class="field-row">
-        <div class="field">
-          <label class="field-label">Company phone (for the website)</label>
-          <input type="tel" id="companyPhone" placeholder="Public-facing number">
-        </div>
-        <div class="field">
-          <label class="field-label">Company email (for the website)</label>
-          <input type="email" id="companyEmail" placeholder="e.g. info@company.co.uk">
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Company registered address</label>
-        <textarea id="companyAddress" placeholder="Registered address — shown in footer" style="min-height: 80px;"></textarea>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Trading address (if different from registered address)</label>
-        <textarea id="tradingAddress" placeholder="Leave blank if same as above" style="min-height: 80px;"></textarea>
-      </div>
-
-      <div class="nav">
-        <button class="btn-secondary" onclick="goTo(6)">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M13 8H3M7 12l-4-4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Back
-        </button>
-        <button class="btn-primary" onclick="goTo(8)">
-          Continue
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-      </div>
-    </section>
-
-    <!-- ── SCREEN 8: ANYTHING ELSE ────────────────────────────── -->
-    <section class="screen" id="screen-8">
-      <div class="section-label">Section 8 of 8</div>
-      <h2 class="screen-title">Anything else?</h2>
-      <p class="screen-hint">The best brief answers we've ever received came from this screen. Don't rush it.</p>
-
-      <div class="field">
-        <label class="field-label">If your website was a person, how would they come across?</label>
-        <textarea id="brandPersonality" placeholder="e.g. Knowledgeable and direct, warm and approachable, premium and no-nonsense — how should a visitor feel?" style="min-height: 100px;"></textarea>
-      </div>
-
-      <div class="field">
-        <label class="field-label">What's one thing clients say about you that you wish more people knew?</label>
-        <textarea id="hiddenUSP" placeholder="What do your best clients always say when they recommend you? What do you take for granted that actually makes you different?" style="min-height: 90px;"></textarea>
-      </div>
-
-      <div class="field">
-        <label class="field-label">What's one thing about your business that, if a client understood it properly, they'd never go anywhere else?</label>
-        <textarea id="keyInsight" placeholder="Take your time with this one. It's the most important answer in the whole brief." style="min-height: 120px;"></textarea>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Any other notes for us?</label>
-        <textarea id="otherNotes" placeholder="Anything at all — a concern, a detail, something you're excited about, something you're worried about. No detail is too small." style="min-height: 80px;"></textarea>
-      </div>
-
-      <div class="nav">
-        <button class="btn-secondary" onclick="goTo(7)">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M13 8H3M7 12l-4-4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Back
-        </button>
-        <button class="btn-submit" onclick="submitBrief()">
-          Submit brief
+        <button class="btn-submit" id="submitBtn" onclick="submitBrief()">
+          Send my brief
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M2 8h12M10 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -1449,8 +940,8 @@
       </div>
     </section>
 
-    <!-- ── SCREEN 9: CONFIRMATION ──────────────────────────────── -->
-    <section class="screen" id="screen-9">
+    <!-- ── SCREEN 4: CONFIRMATION ─────────────────────────────── -->
+    <section class="screen" id="screen-4">
       <div class="confirm-center">
         <div class="confirm-icon">
           <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#C8A96E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1462,10 +953,10 @@
 
         <h2 class="welcome-title" style="font-size: clamp(36px, 6vw, 48px); margin-bottom: 16px;">
           Thank you,<br>
-          <span id="confirmName">we've got everything.</span>
+          <span id="confirmName">we're on it.</span>
         </h2>
 
-        <p style="font-size: 16px; color: var(--text-3); margin-bottom: 0; line-height: 1.7; max-width: 480px; margin: 0 auto 40px;">
+        <p style="font-size: 16px; color: var(--text-3); line-height: 1.7; max-width: 480px; margin: 0 auto 40px;">
           We'll review your brief within 4 hours. Here's what happens next:
         </p>
 
@@ -1480,7 +971,7 @@
           <div class="timeline-item">
             <div class="tl-dot">2</div>
             <div class="tl-content">
-              <div class="tl-title">We confirm your start date and time</div>
+              <div class="tl-title">We confirm your start date</div>
               <div class="tl-desc">Once your deposit is confirmed the 48-hour build clock starts. We'll tell you exactly when your preview arrives.</div>
             </div>
           </div>
@@ -1495,13 +986,13 @@
             <div class="tl-dot">4</div>
             <div class="tl-content">
               <div class="tl-title">Review, approve and go live</div>
-              <div class="tl-desc">You request any changes, approve in writing, and we connect it to your domain</div>
+              <div class="tl-desc">Request any changes, approve in writing, and we connect it to your domain</div>
             </div>
           </div>
         </div>
 
         <div class="confirm-contact">
-          Any questions? Email <a href="/cdn-cgi/l/email-protection#d1b9b4bdbdbe91bfb4a9a0ffb2beffa4ba"><span class="__cf_email__" data-cfemail="0b636e6767644b656e737a256864257e60">[email&#160;protected]</span></a><br>
+          Any questions? Email <a href="mailto:hello@nexq.co.uk">hello@nexq.co.uk</a><br>
           or call <a href="tel:+441234567890">+44 (0)1234 567 890</a>
         </div>
       </div>
@@ -1511,71 +1002,55 @@
 
   <!-- FOOTER -->
   <footer class="footer" id="mainFooter">
-    <div class="footer-logo">
-      <img src="nexq-logo.png" alt="NexQ" class="logo-img" style="height: 18px;">
+    <div>
+      <img src="nexq-logo.png" alt="NexQ" class="logo-img" style="height: 18px; filter: invert(1);">
     </div>
     <div class="footer-text">Professional websites built in 48 hours · nexq.co.uk</div>
   </footer>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-  <script data-cfasync="false">
-    // ── THEME TOGGLE ───────────────────────────────────────────
+  <script>
+    // ── ENDPOINTS ──────────────────────────────────────────────
+    const CAPTURE_ENDPOINT = 'https://dpifpggbtifffacqytqb.supabase.co/functions/v1/capture-lead';
+    const BRIEF_ENDPOINT   = 'https://dpifpggbtifffacqytqb.supabase.co/functions/v1/submit-brief';
+
+    // ── THEME ──────────────────────────────────────────────────
     let isLight = false;
 
     function toggleTheme() {
       isLight = !isLight;
       document.body.classList.toggle('light', isLight);
-      document.getElementById('themeIcon').textContent = isLight ? '◑' : '☀';
+      document.getElementById('themeIcon').textContent  = isLight ? '◑' : '☀';
       document.getElementById('themeLabel').textContent = isLight ? 'Dark mode' : 'Light mode';
       try { localStorage.setItem('nexq_brief_theme', isLight ? 'light' : 'dark'); } catch(e) {}
     }
 
-    // Restore saved theme preference
     (function initTheme() {
       try {
-        const saved = localStorage.getItem('nexq_brief_theme');
-        if (saved === 'light') {
+        if (localStorage.getItem('nexq_brief_theme') === 'light') {
           isLight = true;
           document.body.classList.add('light');
-          document.getElementById('themeIcon').textContent = '◑';
+          document.getElementById('themeIcon').textContent  = '◑';
           document.getElementById('themeLabel').textContent = 'Dark mode';
         }
       } catch(e) {}
     })();
 
-    // ── STATE ──────────────────────────────────────────────────
-    let currentScreen = 0;
-    const TOTAL_SECTIONS = 8;
-
-    // ── URL PARAMS — personalise from ?client=Name ─────────────
+    // ── PERSONALISATION — ?client=Name ────────────────────────
     (function initPersonalisation() {
       const params = new URLSearchParams(window.location.search);
       const client = params.get('client') || params.get('c') || '';
       if (client) {
         const decoded = decodeURIComponent(client);
+        const tag = document.getElementById('personalisedTag');
         document.getElementById('clientNameTag').textContent = decoded;
-        document.getElementById('clientDisplayName').textContent = decoded + '.';
+        if (tag) tag.style.display = 'inline-flex';
         document.getElementById('confirmName').textContent = decoded + '.';
       }
     })();
 
-    // ── CONFETTI ────────────────────────────────────────────────
-    function launchConfetti() {
-      const colours = ['#C8A96E', '#E8D49E', '#FFFFFF'];
-      const count = 40;
-      for (let i = 0; i < count; i++) {
-        const el = document.createElement('div');
-        el.className = 'confetti-piece';
-        el.style.left = Math.random() * 100 + 'vw';
-        el.style.background = colours[Math.floor(Math.random() * colours.length)];
-        el.style.animationDelay = (Math.random() * 0.6) + 's';
-        el.style.animationDuration = (1.4 + Math.random() * 0.8) + 's';
-        el.style.width = (8 + Math.random() * 6) + 'px';
-        el.style.height = (8 + Math.random() * 6) + 'px';
-        document.body.appendChild(el);
-        setTimeout(() => el.remove(), 2500);
-      }
-    }
+    // ── STATE ──────────────────────────────────────────────────
+    let currentScreen = 0;
+    const TOTAL_STEPS = 3;
 
     // ── NAVIGATION ─────────────────────────────────────────────
     function goTo(n) {
@@ -1584,31 +1059,43 @@
       document.getElementById('screen-' + n).classList.add('active');
       updateProgress();
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      if (n === 9) launchConfetti();
+      if (n === 4) launchConfetti();
     }
 
     function updateProgress() {
-      const fill = document.getElementById('progressFill');
+      const fill      = document.getElementById('progressFill');
       const indicator = document.getElementById('stepIndicator');
-      const footer = document.getElementById('mainFooter');
+      const footer    = document.getElementById('mainFooter');
 
       if (currentScreen === 0) {
         fill.style.width = '0%';
         indicator.textContent = 'Overview';
-      } else if (currentScreen === 9) {
+      } else if (currentScreen === 4) {
         fill.style.width = '100%';
         indicator.textContent = 'Complete';
         if (footer) footer.style.display = 'none';
       } else {
-        const pct = Math.round((currentScreen / TOTAL_SECTIONS) * 100);
+        const pct = Math.round((currentScreen / TOTAL_STEPS) * 100);
         fill.style.width = pct + '%';
-        indicator.textContent = 'Section ' + currentScreen + ' of ' + TOTAL_SECTIONS;
+        indicator.textContent = 'Step ' + currentScreen + ' of ' + TOTAL_STEPS;
       }
     }
 
-    // ── CHECKBOXES (multi-select) ───────────────────────────────
-    function toggleCheck(el) {
-      el.classList.toggle('selected');
+    // ── CONFETTI ────────────────────────────────────────────────
+    function launchConfetti() {
+      const colours = ['#C8A96E', '#E8D49E', '#FFFFFF'];
+      for (let i = 0; i < 40; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        el.style.left            = Math.random() * 100 + 'vw';
+        el.style.background      = colours[Math.floor(Math.random() * colours.length)];
+        el.style.animationDelay  = (Math.random() * 0.6) + 's';
+        el.style.animationDuration = (1.4 + Math.random() * 0.8) + 's';
+        el.style.width  = (8 + Math.random() * 6) + 'px';
+        el.style.height = (8 + Math.random() * 6) + 'px';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 2500);
+      }
     }
 
     // ── RADIO GROUPS (single-select) ───────────────────────────
@@ -1620,97 +1107,100 @@
       el.classList.add('selected');
     }
 
-    // ── FILE HANDLING ──────────────────────────────────────────
-    function handleFileSelect(input, type) {
-      if (!input.files || input.files.length === 0) return;
-      const file = input.files[0];
-      showFilePreview(type, file.name, input.files.length);
+    // ── CHECKBOXES (multi-select) ───────────────────────────────
+    function toggleCheck(el) {
+      el.classList.toggle('selected');
     }
 
-    function handleDrop(event, type) {
-      event.preventDefault();
-      document.getElementById(type + 'UploadZone').classList.remove('dragover');
-      const files = event.dataTransfer.files;
-      if (!files || files.length === 0) return;
-      showFilePreview(type, files[0].name, files.length);
+    // ── GET RADIO VALUE ────────────────────────────────────────
+    function getRadioValue(group) {
+      const selected = document.querySelector('[data-group="' + group + '"].selected');
+      return selected ? (selected.getAttribute('data-value') || selected.querySelector('.check-text').textContent.trim()) : '';
     }
 
-    function showFilePreview(type, name, count) {
-      const preview = document.getElementById(type + 'Preview');
-      const nameEl = document.getElementById(type + 'FileName');
-      if (preview && nameEl) {
-        nameEl.textContent = count > 1 ? count + ' files selected' : name;
-        preview.classList.add('visible');
+    // ── VALIDATION HELPERS ─────────────────────────────────────
+    function setError(fieldId, errId, show) {
+      const field = document.getElementById(fieldId);
+      const err   = document.getElementById(errId);
+      if (!field || !err) return;
+      if (show) {
+        field.classList.add('invalid');
+        err.classList.add('visible');
+      } else {
+        field.classList.remove('invalid');
+        err.classList.remove('visible');
       }
     }
 
-    function removeFile(type) {
-      const preview = document.getElementById(type + 'Preview');
-      const input = document.getElementById(type + 'FileInput');
-      if (preview) preview.classList.remove('visible');
-      if (input) input.value = '';
+    function setErrEl(errId, show) {
+      const err = document.getElementById(errId);
+      if (err) err.classList.toggle('visible', show);
     }
 
-    // ── SAVE PROGRESS ──────────────────────────────────────────
-    function saveProgress() {
-      const btn = document.getElementById('saveBtn');
-      const formData = collectFormData();
+    // ── SCREEN 1 → 2: VALIDATE + SILENT CAPTURE ───────────────
+    function nextFromScreen1() {
+      const name  = document.getElementById('contactName').value.trim();
+      const email = document.getElementById('contactEmail').value.trim();
+      const phone = document.getElementById('contactPhone').value.trim();
+      const trade = getRadioValue('trade');
+
+      let valid = true;
+
+      setError('contactName',  'err-contactName',  !name);
+      if (!name) valid = false;
+
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      setError('contactEmail', 'err-contactEmail', !emailOk);
+      if (!emailOk) valid = false;
+
+      setError('contactPhone', 'err-contactPhone', !phone);
+      if (!phone) valid = false;
+
+      setErrEl('err-tradeType', !trade);
+      if (!trade) valid = false;
+
+      if (!valid) return;
+
+      // Silent progressive capture — fire-and-forget, never shown to user
+      captureLeadSilently({ name, email, phone, trade });
+
+      goTo(2);
+    }
+
+    // ── SCREEN 2 → 3: VALIDATE ────────────────────────────────
+    function nextFromScreen2() {
+      const company = document.getElementById('companyName').value.trim();
+      setError('companyName', 'err-companyName', !company);
+      if (!company) return;
+      goTo(3);
+    }
+
+    // ── SILENT LEAD CAPTURE ────────────────────────────────────
+    function captureLeadSilently({ name, email, phone, trade }) {
       try {
-        localStorage.setItem('nexq_brief_progress', JSON.stringify(formData));
-        localStorage.setItem('nexq_brief_screen', currentScreen);
-        btn.textContent = 'Saved ✓';
-        btn.style.color = '#C8A96E';
-        setTimeout(() => {
-          btn.textContent = 'Save progress';
-          btn.style.color = '';
-        }, 2500);
+        fetch(CAPTURE_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          keepalive: true,
+          body: JSON.stringify({
+            name,
+            email,
+            phone,
+            job_title:     trade,
+            source_detail: 'NexQ Brief Form — step 1',
+          }),
+        }).catch(() => {}); // swallow all errors silently
       } catch(e) {
-        btn.textContent = 'Could not save';
-        setTimeout(() => { btn.textContent = 'Save progress'; }, 2000);
+        // never surface to user
       }
-    }
-
-    // ── RESTORE SAVED PROGRESS ─────────────────────────────────
-    (function restoreProgress() {
-      try {
-        const saved = localStorage.getItem('nexq_brief_progress');
-        if (!saved) return;
-        const data = JSON.parse(saved);
-        Object.keys(data).forEach(id => {
-          const el = document.getElementById(id);
-          if (el && el.tagName !== 'BUTTON') {
-            el.value = data[id];
-          }
-        });
-      } catch(e) {}
-    })();
-
-    // ── COLLECT FORM DATA ──────────────────────────────────────
-    function collectFormData() {
-      const ids = [
-        'companyName','businessDesc','yearsTrading','teamSize','location',
-        'idealCustomers','targetWork','contractValue','competitors','differentiators',
-        'services','priorityServices','accreditations','otherSectors','awards',
-        'currentSite','cta','designRefs','designAvoid','colours','style',
-        'reviews','caseStudies',
-        'domainName','registrar','preferredDomain','notificationEmail',
-        'contactName','contactRole','contactEmail','contactPhone','bestContact',
-        'companyPhone','companyEmail','companyAddress','tradingAddress',
-        'brandPersonality','hiddenUSP','keyInsight','otherNotes'
-      ];
-      const data = {};
-      ids.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) data[id] = el.value;
-      });
-      return data;
     }
 
     // ── COLLECT CHECKBOXES ─────────────────────────────────────
     function collectCheckboxes() {
       const result = {};
       document.querySelectorAll('.check-item.selected .check-text').forEach(el => {
-        const group = el.closest('.check-item').getAttribute('data-group') || 'features';
+        const item  = el.closest('.check-item');
+        const group = item.getAttribute('data-group') || 'features';
         if (!result[group]) result[group] = [];
         result[group].push(el.textContent.trim());
       });
@@ -1718,19 +1208,44 @@
     }
 
     // ── SUBMIT ─────────────────────────────────────────────────
-    const BRIEF_ENDPOINT = 'https://dpifpggbtifffacqytqb.supabase.co/functions/v1/submit-brief';
-
     async function submitBrief() {
-      const formData = collectFormData();
+      const btn = document.getElementById('submitBtn');
 
-      // Basic validation
-      if (!formData.contactName || !formData.contactEmail) {
-        alert('Please fill in your name and email on the Contact Details screen before submitting.');
-        return;
-      }
+      const contactName  = document.getElementById('contactName').value.trim();
+      const contactEmail = document.getElementById('contactEmail').value.trim();
+      const contactPhone = document.getElementById('contactPhone').value.trim();
+      const tradeType    = getRadioValue('trade');
+      const companyName  = document.getElementById('companyName').value.trim();
+      const location     = document.getElementById('location').value.trim();
+      const businessDesc = document.getElementById('businessDesc').value.trim();
+      const goalValue    = getRadioValue('goal');
+      const currentSite  = document.getElementById('currentSite').value.trim();
+      const otherNotes   = document.getElementById('otherNotes').value.trim();
+      const styleValue   = getRadioValue('style');
+      const checkboxes   = collectCheckboxes();
 
-      // Show loading on submit button
-      const btn = document.querySelector('.btn-submit');
+      const payload = {
+        // Contact
+        contactName,
+        contactEmail,
+        contactPhone,
+        contactRole:   tradeType,
+        // Company
+        companyName,
+        location,
+        businessDesc,
+        cta:           goalValue,
+        currentSite,
+        // Website
+        style:         styleValue,
+        otherNotes,
+        checkboxes,
+        submittedAt:   new Date().toISOString(),
+        // Pass through as notificationEmail so follow-up goes to right place
+        notificationEmail: contactEmail,
+      };
+
+      // Show loading
       const originalHtml = btn.innerHTML;
       btn.disabled = true;
       btn.innerHTML = `
@@ -1738,16 +1253,13 @@
              style="animation:spin 0.8s linear infinite;flex-shrink:0">
           <path d="M21 12a9 9 0 1 1-6.219-8.56" stroke-linecap="round"/>
         </svg>
-        Submitting…`;
-
-      const checkboxData = collectCheckboxes();
-      const allData = { ...formData, checkboxes: checkboxData, submittedAt: new Date().toISOString() };
+        Sending…`;
 
       try {
         const res = await fetch(BRIEF_ENDPOINT, {
-          method: 'POST',
+          method:  'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(allData),
+          body:    JSON.stringify(payload),
         });
 
         if (!res.ok) {
@@ -1755,20 +1267,30 @@
           throw new Error(err.error || 'Submission failed');
         }
 
-        // Success
-        try { localStorage.removeItem('nexq_brief_progress'); } catch(e) {}
-        goTo(9);
-        const company = formData.companyName || formData.contactName || '';
+        // Update confirm name
+        const company = companyName || contactName || '';
         if (company) document.getElementById('confirmName').textContent = company + '.';
 
-      } catch (err) {
-        btn.disabled = false;
+        goTo(4);
+
+      } catch(err) {
+        btn.disabled  = false;
         btn.innerHTML = originalHtml;
-        alert('There was a problem submitting your brief. Please try again or email us directly at hello@nexq.co.uk');
+        alert('There was a problem sending your brief. Please try again or email us at hello@nexq.co.uk');
         console.error('Brief submission error:', err);
       }
     }
-  </script>
 
+    // ── CLEAR VALIDATION ON INPUT ──────────────────────────────
+    ['contactName','contactEmail','contactPhone','companyName'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', () => {
+        el.classList.remove('invalid');
+        const errEl = document.getElementById('err-' + id);
+        if (errEl) errEl.classList.remove('visible');
+      });
+    });
+
+  </script>
 </body>
 </html>
