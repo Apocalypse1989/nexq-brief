@@ -642,7 +642,7 @@
       <img src="nexq-logo.png" alt="NexQ" class="logo-img">
     </a>
     <div class="header-right">
-      <span class="step-indicator" id="stepIndicator">Overview</span>
+      <span class="step-indicator" id="stepIndicator">Step 1 of 3</span>
       <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
         <span class="theme-icon" id="themeIcon">☀</span>
         <span id="themeLabel">Light mode</span>
@@ -658,46 +658,20 @@
   <!-- MAIN -->
   <main class="main">
 
-    <!-- ── SCREEN 0: WELCOME ──────────────────────────────────── -->
-    <section class="screen active" id="screen-0">
+    <!-- ── SCREEN 1: WELCOME + CONTACT (lead capture) ─────────── -->
+    <section class="screen active" id="screen-1">
       <div class="personalised-tag" id="personalisedTag" style="display:none">
         Prepared for <strong id="clientNameTag">your business</strong>
       </div>
       <div class="badge">Website Brief</div>
-      <h1 class="welcome-title">
+      <h1 class="welcome-title" style="font-size: clamp(30px, 5vw, 42px); margin-bottom: 12px;">
         Tell us about<br>
         <span>your business.</span>
       </h1>
-      <p class="welcome-sub">We'll handle everything else — copy, design, build. Your first draft is ready in 48 hours.</p>
-      <div class="info-card">
-        <p>No trick questions. Just tell us about your business in plain English. If you're unsure about anything, leave it blank — we'll talk it through.</p>
-      </div>
-      <div class="stats">
-        <div>
-          <div class="stat-num">3</div>
-          <div class="stat-label">Short steps</div>
-        </div>
-        <div>
-          <div class="stat-num">~5</div>
-          <div class="stat-label">Minutes</div>
-        </div>
-        <div>
-          <div class="stat-num">48hr</div>
-          <div class="stat-label">First draft</div>
-        </div>
-      </div>
-      <button class="btn-primary" onclick="goTo(1)">
-        Start
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-    </section>
+      <p class="welcome-sub" style="margin-bottom: 12px;">We'll handle everything else — copy, design, build. Your first draft is ready in 48 hours.</p>
+      <p style="font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-4); margin-bottom: 36px;">3 short steps · ~5 minutes · 48-hour first draft</p>
 
-    <!-- ── SCREEN 1: CONTACT (lead capture) ──────────────────── -->
-    <section class="screen" id="screen-1">
       <div class="section-label">Step 1 of 3</div>
-      <h2 class="screen-title">First, about you.</h2>
       <p class="screen-hint">So we know who to send your draft to.</p>
 
       <div class="field-row">
@@ -758,13 +732,7 @@
         <div class="field-error" id="err-tradeType">Please select a business type</div>
       </div>
 
-      <div class="nav">
-        <button class="btn-secondary" onclick="goTo(0)">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M13 8H3M7 12l-4-4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Back
-        </button>
+      <div class="nav" style="justify-content: flex-end;">
         <button class="btn-primary" onclick="nextFromScreen1()">
           Continue
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -1049,7 +1017,9 @@
     })();
 
     // ── STATE ──────────────────────────────────────────────────
-    let currentScreen = 0;
+    // Form opens directly on screen-1 ("tell us about you") — no separate
+    // landing/overview screen to click through first.
+    let currentScreen = 1;
     const TOTAL_STEPS = 3;
 
     // ── NAVIGATION ─────────────────────────────────────────────
@@ -1067,10 +1037,7 @@
       const indicator = document.getElementById('stepIndicator');
       const footer    = document.getElementById('mainFooter');
 
-      if (currentScreen === 0) {
-        fill.style.width = '0%';
-        indicator.textContent = 'Overview';
-      } else if (currentScreen === 4) {
+      if (currentScreen === 4) {
         fill.style.width = '100%';
         indicator.textContent = 'Complete';
         if (footer) footer.style.display = 'none';
@@ -1080,6 +1047,9 @@
         indicator.textContent = 'Step ' + currentScreen + ' of ' + TOTAL_STEPS;
       }
     }
+
+    // Sync progress bar/indicator with the starting screen (Step 1 of 3)
+    updateProgress();
 
     // ── CONFETTI ────────────────────────────────────────────────
     function launchConfetti() {
