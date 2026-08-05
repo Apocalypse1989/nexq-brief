@@ -3,6 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ── Consent Mode v2 defaults (must run before gtag.js loads, before
+       any other script) — everything denied by default. This form has no
+       cookie-consent UI of its own, so consent stays denied unless a
+       future banner grants it; gtag still sends a cookieless conversion
+       ping under "denied", which is what generate_lead below relies on.
+       No AW- Google Ads ID configured here yet — added later in the
+       Ads UI once the conversion action exists. ─────────────────────── -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'analytics_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'wait_for_update': 500
+    });
+  </script>
+
+  <!-- ── Google tag (gtag.js) — same GA4 property/ID as nexq.co.uk, loaded
+       unconditionally so the "denied" default above still allows a
+       cookieless conversion signal. `linker.domains` enables cross-domain
+       stitching for visitors who arrive via a real <a href> link from
+       nexq.co.uk (e.g. Nav.tsx); it does NOT cover the window.open()-based
+       CTA buttons on the main site, which are not anchor elements. ────── -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1CBH5JK35Q"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-1CBH5JK35Q', {
+      anonymize_ip: true,
+      linker: { domains: ['nexq.co.uk', 'form.nexq.co.uk'] }
+    });
+  </script>
+
   <title>NexQ — Client Website Brief</title>
   <meta name="description" content="Complete your NexQ website brief. Professional websites built and delivered in 48 hours.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -1242,6 +1277,12 @@
         // Update confirm name
         const company = companyName || contactName || '';
         if (company) document.getElementById('confirmName').textContent = company + '.';
+
+        // Lead-completion event — fires regardless of consent state;
+        // Consent Mode v2 (set above) is what restricts the data, not this.
+        if (typeof gtag === 'function') {
+          gtag('event', 'generate_lead', { form_name: 'brief_form' });
+        }
 
         goTo(4);
 
