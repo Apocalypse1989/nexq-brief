@@ -658,6 +658,84 @@
     ::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--text-4); }
 
+    /* ── COOKIE BANNER ────────────────────────────────────────── */
+    .cookie-banner {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 9500;
+      background: var(--bg-1);
+      border-top: 1px solid var(--border);
+      box-shadow: 0 -8px 32px rgba(0,0,0,0.35);
+      padding: 20px clamp(16px, 4vw, 32px);
+      animation: cookieSlideUp 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    @keyframes cookieSlideUp {
+      from { transform: translateY(100%); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .cookie-banner-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .cookie-banner-text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-2);
+      max-width: 620px;
+    }
+
+    .cookie-banner-text strong { color: var(--text-1); }
+
+    .cookie-banner-actions {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .cookie-btn {
+      height: 38px;
+      padding: 0 20px;
+      border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: filter 0.2s, border-color 0.2s, color 0.2s;
+    }
+
+    .cookie-btn-accept {
+      border: none;
+      background: var(--gold);
+      color: #09090E;
+    }
+
+    .cookie-btn-accept:hover { filter: brightness(1.1); }
+
+    .cookie-btn-essential {
+      border: 1.5px solid var(--border-2);
+      background: transparent;
+      color: var(--text-2);
+    }
+
+    .cookie-btn-essential:hover { border-color: var(--gold); color: var(--text-1); }
+
+    @media (max-width: 640px) {
+      .cookie-banner-inner { flex-direction: column; align-items: stretch; }
+      .cookie-banner-actions { width: 100%; }
+      .cookie-btn { flex: 1; }
+    }
+
     /* ── MOBILE ───────────────────────────────────────────────── */
     @media (max-width: 640px) {
       .header { padding: 0 16px; }
@@ -998,7 +1076,7 @@
 
         <div class="confirm-contact">
           Any questions? Email <a href="mailto:hello@nexq.co.uk">hello@nexq.co.uk</a><br>
-          or call <a href="tel:+441234567890">+44 (0)1234 567 890</a>
+          or call <a href="tel:+443300243335">+44 330 024 3335</a>
         </div>
       </div>
     </section>
@@ -1012,6 +1090,25 @@
     </div>
     <div class="footer-text">Professional websites built in 48 hours · nexq.co.uk</div>
   </footer>
+
+  <!-- COOKIE CONSENT BANNER — gates the GA4 consent grant only (Consent
+       Mode v2 defaults to denied above; this form has no Clarity script).
+       Choice stored in localStorage under 'nexq-form-cookies' — distinct
+       key from the main site's 'nexq-cookies' since this is a separate
+       domain (form.nexq.co.uk). -->
+  <div class="cookie-banner" id="cookieBanner" style="display: none;">
+    <div class="cookie-banner-inner">
+      <div class="cookie-banner-text">
+        We use <strong>Google Analytics</strong> to understand how visitors use this form —
+        pages visited and general usage — so we can improve it. No advertising networks or
+        data brokers are involved.
+      </div>
+      <div class="cookie-banner-actions">
+        <button class="cookie-btn cookie-btn-essential" onclick="chooseCookies('essential')">Essential only</button>
+        <button class="cookie-btn cookie-btn-accept" onclick="chooseCookies('all')">Accept all</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     // ── ENDPOINTS ──────────────────────────────────────────────
@@ -1038,6 +1135,40 @@
           document.getElementById('themeLabel').textContent = 'Dark mode';
         }
       } catch(e) {}
+    })();
+
+    // ── COOKIE CONSENT ─────────────────────────────────────────
+    // Tells gtag what the visitor has actually consented to. Denied by
+    // default (Consent Mode v2 defaults set in <head>); this is the only
+    // thing that ever grants. Mirrors nexq.co.uk's CookieBanner.tsx.
+    function updateConsent(granted) {
+      if (typeof gtag !== 'function') return;
+      gtag('consent', 'update', {
+        ad_storage: granted ? 'granted' : 'denied',
+        analytics_storage: granted ? 'granted' : 'denied',
+        ad_user_data: granted ? 'granted' : 'denied',
+        ad_personalization: granted ? 'granted' : 'denied',
+      });
+    }
+
+    function chooseCookies(choice) {
+      try { localStorage.setItem('nexq-form-cookies', choice); } catch(e) {}
+      document.getElementById('cookieBanner').style.display = 'none';
+      updateConsent(choice === 'all');
+    }
+
+    (function initCookieBanner() {
+      let stored = null;
+      try { stored = localStorage.getItem('nexq-form-cookies'); } catch(e) {}
+
+      if (stored === 'all') {
+        updateConsent(true);
+      } else if (stored === 'essential') {
+        updateConsent(false);
+      } else {
+        // No choice stored yet — show the banner, stay denied until chosen.
+        document.getElementById('cookieBanner').style.display = 'block';
+      }
     })();
 
     // ── PERSONALISATION — ?client=Name ────────────────────────
