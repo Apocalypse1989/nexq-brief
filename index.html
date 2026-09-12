@@ -9,8 +9,9 @@
        cookie-consent UI of its own, so consent stays denied unless a
        future banner grants it; gtag still sends a cookieless conversion
        ping under "denied", which is what generate_lead below relies on.
-       No AW- Google Ads ID configured here yet — added later in the
-       Ads UI once the conversion action exists. ─────────────────────── -->
+       AW-18224891860 is configured below so Ads tag diagnostics see the
+       tag on form.nexq.co.uk; primary conversion remains the GA4 import
+       of generate_lead. ─────────────────────────────────────────────── -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -36,6 +37,7 @@
       anonymize_ip: true,
       linker: { domains: ['nexq.co.uk', 'form.nexq.co.uk'] }
     });
+    gtag('config', 'AW-18224891860');
   </script>
 
   <title>NexQ — Client Website Brief</title>
