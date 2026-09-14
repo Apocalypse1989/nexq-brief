@@ -1186,6 +1186,77 @@
       }
     })();
 
+    // ── ADS / UTM ATTRIBUTION (first-touch) ────────────────────
+    // Homepage (nexq.co.uk) already forwards gclid/UTMs onto this URL.
+    // Persist them immediately so multi-step navigation, reloads, or a
+    // stripped query string cannot drop the click IDs before submit.
+    // First-touch: an already-stored value wins over a later URL param.
+    const ATTRIBUTION_STORAGE_KEY = 'nexq_attribution';
+    const ATTRIBUTION_KEYS = [
+      'gclid', 'gbraid', 'wbraid',
+      'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
+    ];
+    const ATTRIBUTION_MAX_LEN = 255;
+
+    function sanitizeAttributionValue(value) {
+      if (value == null) return '';
+      const s = String(value).trim().slice(0, ATTRIBUTION_MAX_LEN);
+      if (!s || /[\u0000-\u001F\u007F]/.test(s)) return '';
+      return s;
+    }
+
+    function readStoredAttribution() {
+      for (const store of [sessionStorage, localStorage]) {
+        try {
+          const raw = store.getItem(ATTRIBUTION_STORAGE_KEY);
+          if (!raw) continue;
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === 'object') return parsed;
+        } catch (e) {}
+      }
+      return {};
+    }
+
+    function persistAttribution(attr) {
+      const json = JSON.stringify(attr);
+      try { sessionStorage.setItem(ATTRIBUTION_STORAGE_KEY, json); } catch (e) {}
+      try { localStorage.setItem(ATTRIBUTION_STORAGE_KEY, json); } catch (e) {}
+    }
+
+    function captureAttributionFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const stored = readStoredAttribution();
+      const next = Object.assign({}, stored);
+
+      ATTRIBUTION_KEYS.forEach(function (key) {
+        const fromUrl = sanitizeAttributionValue(params.get(key));
+        if (fromUrl && !next[key]) next[key] = fromUrl;
+      });
+
+      if (next.gclid && !next.gclid_captured_at) {
+        next.gclid_captured_at = new Date().toISOString();
+      }
+
+      persistAttribution(next);
+      return next;
+    }
+
+    function attributionPayload() {
+      const stored = readStoredAttribution();
+      const out = {};
+      ATTRIBUTION_KEYS.forEach(function (key) {
+        const v = sanitizeAttributionValue(stored[key]);
+        if (v) out[key] = v;
+      });
+      if (stored.gclid_captured_at && out.gclid) {
+        const captured = sanitizeAttributionValue(stored.gclid_captured_at);
+        if (captured) out.gclid_captured_at = captured;
+      }
+      return out;
+    }
+
+    captureAttributionFromUrl();
+
     // ── STATE ──────────────────────────────────────────────────
     // Form opens directly on screen-1 ("tell us about you") — no separate
     // landing/overview screen to click through first.
@@ -1322,13 +1393,13 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           keepalive: true,
-          body: JSON.stringify({
+          body: JSON.stringify(Object.assign({
             name,
             email,
             phone,
             job_title:     trade,
             source_detail: 'NexQ Brief Form — step 1',
-          }),
+          }, attributionPayload())),
         }).catch(() => {}); // swallow all errors silently
       } catch(e) {
         // never surface to user
@@ -1364,7 +1435,7 @@
       const styleValue   = getRadioValue('style');
       const checkboxes   = collectCheckboxes();
 
-      const payload = {
+      const payload = Object.assign({
         // Contact
         contactName,
         contactEmail,
@@ -1383,7 +1454,7 @@
         submittedAt:   new Date().toISOString(),
         // Pass through as notificationEmail so follow-up goes to right place
         notificationEmail: contactEmail,
-      };
+      }, attributionPayload());
 
       // Show loading
       const originalHtml = btn.innerHTML;
