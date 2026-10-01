@@ -10,9 +10,11 @@
        That handoff is applied here, before config, so analytics runs
        without a second banner. Missing or restricted consent stays denied;
        the banner below is the only other thing that grants. gtag still
-       sends a cookieless ping under "denied". AW-18224891860 is configured
-       below so Ads tag diagnostics see the tag on form.nexq.co.uk; primary
-       conversion remains the GA4 import of generate_lead. ─────────────── -->
+       sends a cookieless ping under "denied" (gcs=G100). That ping is not
+       shown in GA4 Realtime or DebugView and does not increment the Ads
+       import. AW-18224891860 is configured below so Ads tag diagnostics
+       see the tag; there is no AW conversion label in this repo. Primary
+       conversion remains the GA4 key-event import of generate_lead. ──── -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -58,17 +60,26 @@
 
   <!-- ── Google tag (gtag.js) — same GA4 property/ID as nexq.co.uk, loaded
        unconditionally so the "denied" default above still allows a
-       cookieless conversion signal. `linker.domains` enables cross-domain
-       stitching for visitors who arrive via a real <a href> link from
-       nexq.co.uk (e.g. Nav.tsx); it does NOT cover the window.open()-based
-       CTA buttons on the main site, which are not anchor elements. ────── -->
+       cookieless ping. `linker.domains` enables cross-domain stitching for
+       visitors who arrive via a real <a href> link from nexq.co.uk
+       (e.g. Nav.tsx); it does NOT cover the window.open()-based CTA
+       buttons on the main site, which are not anchor elements. ──────── -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-1CBH5JK35Q"></script>
   <script>
     gtag('js', new Date());
-    gtag('config', 'G-1CBH5JK35Q', {
+    // ?nexq_debug=1 opts this page view into GA4 DebugView only.
+    var nexqGa4Config = {
       anonymize_ip: true,
       linker: { domains: ['nexq.co.uk', 'form.nexq.co.uk'] }
-    });
+    };
+    try {
+      if (new URLSearchParams(window.location.search).get('nexq_debug') === '1') {
+        nexqGa4Config.debug_mode = true;
+      }
+    } catch (e) {}
+    gtag('config', 'G-1CBH5JK35Q', nexqGa4Config);
+    // Diagnostics only. No AW-18224891860/<label> exists in this repo, so
+    // this does not fire the Ads primary conversion.
     gtag('config', 'AW-18224891860');
   </script>
 
@@ -1462,6 +1473,78 @@
       return result;
     }
 
+    // ── GA4 generate_lead ─────────────────────────────────────
+    // Fired only after submit-brief returns OK. One shot per page load.
+    //
+    // No Google Ads conversion label (AW-18224891860/<label>) exists in
+    // this repo. Do not invent one: a conversion hit without a real label
+    // is not an Ads conversion. AW-18224891860 is configured above for tag
+    // diagnostics only. The Ads primary conversion is the GA4 import of
+    // generate_lead, which counts only after the event is a GA4 key event
+    // and the hit is consented (gcs=G111). A denied cookieless ping is
+    // still sent by Consent Mode but is omitted from Realtime/DebugView.
+    const NEXQ_GA4_ID = 'G-1CBH5JK35Q';
+    const NEXQ_LEAD_READY_MS = 400;
+    const NEXQ_LEAD_CALLBACK_MS = 1000;
+
+    function nexqGtagLibraryReady() {
+      const dl = window.dataLayer;
+      return !!(dl && typeof dl.push === 'function' && dl.push !== Array.prototype.push);
+    }
+
+    function waitForGtagLibrary() {
+      return new Promise((resolve) => {
+        const start = Date.now();
+        (function poll() {
+          if (nexqGtagLibraryReady() || Date.now() - start >= NEXQ_LEAD_READY_MS) resolve();
+          else setTimeout(poll, 40);
+        })();
+      });
+    }
+
+    // Queues generate_lead, then waits for gtag's event_callback or a short
+    // timeout. The timeout always wins if the tag is blocked, consent mode
+    // never invokes the callback, or gtag.js has not loaded — the thank-you
+    // screen must not depend on Google.
+    function trackGenerateLeadOnce() {
+      if (window.__nexqGenerateLeadFired) return Promise.resolve();
+      window.__nexqGenerateLeadFired = true;
+
+      return waitForGtagLibrary().then(() => new Promise((resolve) => {
+        let settled = false;
+        let timer = 0;
+        const done = () => {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          resolve();
+        };
+        timer = setTimeout(done, NEXQ_LEAD_CALLBACK_MS);
+
+        const params = {
+          send_to: NEXQ_GA4_ID,
+          form_name: 'brief_form',
+          transport_type: 'beacon',
+          event_callback: done,
+          event_timeout: NEXQ_LEAD_CALLBACK_MS,
+        };
+
+        try {
+          if (typeof gtag === 'function') {
+            gtag('event', 'generate_lead', params);
+          } else {
+            // Same Arguments-object shape the head stub uses, so a late
+            // gtag.js can still drain the command.
+            window.dataLayer = window.dataLayer || [];
+            (function () { window.dataLayer.push(arguments); })('event', 'generate_lead', params);
+            done();
+          }
+        } catch (e) {
+          done();
+        }
+      }));
+    }
+
     // ── SUBMIT ─────────────────────────────────────────────────
     async function submitBrief() {
       const btn = document.getElementById('submitBtn');
@@ -1526,13 +1609,12 @@
         const company = companyName || contactName || '';
         if (company) document.getElementById('confirmName').textContent = company + '.';
 
-        // Exactly one GA4 generate_lead, and only after this POST succeeds.
-        // Step-1 capture-lead, a failed submit, and page load do not fire it.
-        // Consent Mode (granted via banner or ?nexq_consent=all) decides
-        // whether the hit is consented or cookieless — not this call.
-        if (!window.__nexqGenerateLeadFired && typeof gtag === 'function') {
-          window.__nexqGenerateLeadFired = true;
-          gtag('event', 'generate_lead', { form_name: 'brief_form' });
+        // Queue the hit before the thank-you screen. Only this success
+        // path runs it — not capture-lead, a failed POST, or page load.
+        try {
+          await trackGenerateLeadOnce();
+        } catch (trackErr) {
+          console.error('generate_lead tracking error:', trackErr);
         }
 
         goTo(4);
