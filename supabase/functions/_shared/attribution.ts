@@ -38,6 +38,19 @@ export function pickAttribution(data: Record<string, unknown>): Attribution {
   }
   if (attr.gclid && !captured) captured = new Date().toISOString();
   attr.gclid_captured_at = attr.gclid ? captured : null;
+  return withClickIdUtmFallback(attr);
+}
+
+/**
+ * Auto-tagged Google clicks often arrive with gclid/gbraid/wbraid and no UTMs.
+ * A click id with a blank source/medium is google/cpc. Never overwrite a
+ * source that was actually on the URL.
+ */
+export function withClickIdUtmFallback(attr: Attribution): Attribution {
+  const hasClick = Boolean(attr.gclid || attr.gbraid || attr.wbraid);
+  if (!hasClick) return attr;
+  if (!attr.utm_source) attr.utm_source = 'google';
+  if (!attr.utm_medium && attr.utm_source === 'google') attr.utm_medium = 'cpc';
   return attr;
 }
 

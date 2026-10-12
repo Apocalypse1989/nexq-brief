@@ -6,14 +6,19 @@
 
   <!-- ── Consent Mode v2 defaults (must run before gtag.js loads, before
        any other script) — everything denied by default. A prior choice on
-       nexq.co.uk arrives as ?nexq_consent=all (or granted/accepted/accept).
+       nexq.co.uk arrives as ?nexq_consent=all (or granted/accepted/accept),
+       or as a first-party cookie nexq_consent=all on Domain=.nexq.co.uk.
        That handoff is applied here, before config, so analytics runs
-       without a second banner. Missing or restricted consent stays denied;
-       the banner below is the only other thing that grants. gtag still
-       sends a cookieless ping under "denied" (gcs=G100). That ping is not
-       shown in GA4 Realtime or DebugView and does not increment the Ads
-       import. AW-18224891860 is configured below so Ads tag diagnostics
-       see the tag; there is no AW conversion label in this repo. Primary
+       without a second banner. An explicit essential/denied query value
+       is not a grant and does not get upgraded by the cookie. Missing
+       consent stays denied; the banner below is the only other grant.
+       url_passthrough lets Google keep measuring the click without
+       cookies. ads_data_redaction is intentionally off: turning it on
+       strips gclid/gbraid/wbraid from the cookieless ping, which is the
+       only signal Ads can model when consent is denied. Denied hits are
+       gcs=G100, set no ad cookies, and are omitted from GA4 Realtime.
+       AW-18224891860 is configured below so Ads tag diagnostics see the
+       tag; there is no AW conversion label in this repo. Primary
        conversion remains the GA4 key-event import of generate_lead. ──── -->
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -25,6 +30,10 @@
       'ad_personalization': 'denied',
       'wait_for_update': 500
     });
+    // Pass click ids across pages when storage is denied. Do not redact
+    // them: the cookieless generate_lead ping has to carry the click id
+    // or Ads cannot attribute the modelled conversion.
+    gtag('set', 'url_passthrough', true);
 
     // 'all' = analytics already accepted upstream. Anything else (including
     // essential/denied, or an unknown value) is not a grant.
@@ -35,35 +44,91 @@
       return null;
     };
 
+    window.nexqReadConsentCookie = function () {
+      try {
+        var parts = document.cookie ? document.cookie.split(';') : [];
+        for (var i = 0; i < parts.length; i++) {
+          var part = parts[i].replace(/^\s+/, '');
+          if (part.indexOf('nexq_consent=') === 0) {
+            return window.nexqNormalizeConsent(decodeURIComponent(part.slice(13)));
+          }
+        }
+      } catch (e) {}
+      return null;
+    };
+
+    // Google's own cookie shapes, written only after a grant so a late
+    // consent update or a slow gtag.js still has the click id when the
+    // conversion hit is built. Values that fail the tag's [\w-]+ check
+    // are skipped rather than written into document.cookie.
+    window.nexqWriteClickCookies = function (ids) {
+      if (!ids) return;
+      var ts = String(Math.floor(Date.now() / 1000));
+      var secure = location.protocol === 'https:' ? '; Secure' : '';
+      var suffix = '; path=/; max-age=7776000; SameSite=Lax' + secure;
+      function ok(value) { return typeof value === 'string' && /^[\w-]+$/.test(value); }
+      try {
+        if (ok(ids.gclid)) document.cookie = '_gcl_aw=GCL.' + ts + '.' + ids.gclid + suffix;
+        if (ok(ids.gbraid)) document.cookie = '_gcl_ag=2.1.k' + ids.gbraid + '$i' + ts + suffix;
+        if (ok(ids.wbraid)) document.cookie = '_gcl_gb=GCL.' + ts + '.' + ids.wbraid + suffix;
+      } catch (e) {}
+    };
+
+    window.nexqClickIdsFromSearch = function () {
+      var out = {};
+      try {
+        var params = new URLSearchParams(window.location.search);
+        ['gclid', 'gbraid', 'wbraid'].forEach(function (key) {
+          var value = params.get(key);
+          if (value) out[key] = value.trim();
+        });
+      } catch (e) {}
+      return out;
+    };
+
     window.nexqHandoffConsent = null;
+    var nexqQueryConsentRaw = null;
     try {
-      window.nexqHandoffConsent = window.nexqNormalizeConsent(
-        new URLSearchParams(window.location.search).get('nexq_consent')
-      );
+      nexqQueryConsentRaw = new URLSearchParams(window.location.search).get('nexq_consent');
+      window.nexqHandoffConsent = window.nexqNormalizeConsent(nexqQueryConsentRaw);
     } catch (e) {}
+
+    // Explicit essential/denied on this visit wins over a stale cookie.
+    // No query param at all (iOS handoff dropped it) may still carry the
+    // parent-domain cookie set by nexq.co.uk.
+    var nexqQueryExplicitDeny = nexqQueryConsentRaw != null && window.nexqHandoffConsent !== 'all';
+    if (!nexqQueryExplicitDeny && window.nexqHandoffConsent !== 'all') {
+      var nexqCookieConsent = window.nexqReadConsentCookie();
+      if (nexqCookieConsent === 'all') window.nexqHandoffConsent = 'all';
+    }
 
     if (window.nexqHandoffConsent === 'all') {
       try { localStorage.setItem('nexq-form-cookies', 'all'); } catch (e) {}
     }
 
-    var nexqStoredConsent = null;
-    try { nexqStoredConsent = localStorage.getItem('nexq-form-cookies'); } catch (e) {}
-    if (window.nexqHandoffConsent === 'all' || nexqStoredConsent === 'all') {
+    window.nexqConsentGranted = function () {
+      if (window.nexqHandoffConsent === 'all') return true;
+      try { return localStorage.getItem('nexq-form-cookies') === 'all'; } catch (e) { return false; }
+    };
+    if (window.nexqConsentGranted()) {
       gtag('consent', 'update', {
         'ad_storage': 'granted',
         'analytics_storage': 'granted',
         'ad_user_data': 'granted',
         'ad_personalization': 'granted'
       });
+      // Before gtag.js runs, so config reads the ids while storage is allowed.
+      window.nexqWriteClickCookies(window.nexqClickIdsFromSearch());
     }
   </script>
 
   <!-- ── Google tag (gtag.js) — same GA4 property/ID as nexq.co.uk, loaded
        unconditionally so the "denied" default above still allows a
-       cookieless ping. `linker.domains` enables cross-domain stitching for
-       visitors who arrive via a real <a href> link from nexq.co.uk
-       (e.g. Nav.tsx); it does NOT cover the window.open()-based CTA
-       buttons on the main site, which are not anchor elements. ──────── -->
+       cookieless ping. `linker.domains` stitches a real <a href> from
+       nexq.co.uk. It does not cover that site's window.open() CTAs, and
+       those CTAs currently wait up to 400ms for gtag linker_param before
+       opening the tab, which iOS Safari drops. Click ids still have to
+       be on the form URL itself. ──────── -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-1CBH5JK35Q"></script>
   <script>
     gtag('js', new Date());
@@ -1200,7 +1265,13 @@
     function chooseCookies(choice) {
       try { localStorage.setItem('nexq-form-cookies', choice); } catch(e) {}
       document.getElementById('cookieBanner').style.display = 'none';
-      updateConsent(choice === 'all');
+      const granted = choice === 'all';
+      updateConsent(granted);
+      // Consent update does not replay a click id the tag already skipped.
+      // Write the cookies only on grant, then the conversion hit can read them.
+      if (granted && window.nexqWriteClickCookies) {
+        window.nexqWriteClickCookies(attributionPayload());
+      }
     }
 
     (function initCookieBanner() {
@@ -1284,6 +1355,14 @@
         if (fromUrl && !next[key]) next[key] = fromUrl;
       });
 
+      // Auto-tagging puts gclid/gbraid/wbraid on the URL and often no UTMs.
+      // The CRM row should still read as google/cpc. Don't replace a source
+      // that was actually captured.
+      if (next.gclid || next.gbraid || next.wbraid) {
+        if (!next.utm_source) next.utm_source = 'google';
+        if (!next.utm_medium && next.utm_source === 'google') next.utm_medium = 'cpc';
+      }
+
       if (next.gclid && !next.gclid_captured_at) {
         next.gclid_captured_at = new Date().toISOString();
       }
@@ -1293,6 +1372,12 @@
     function captureAttributionFromUrl() {
       liveAttribution = mergeAttribution(readStoredAttribution());
       persistAttribution(liveAttribution);
+      // URL click ids that survived only in storage (query string stripped
+      // after the first paint) still need to be on the Google cookies
+      // before the conversion hit. Never written unless consent is granted.
+      if (window.nexqConsentGranted && window.nexqConsentGranted() && window.nexqWriteClickCookies) {
+        window.nexqWriteClickCookies(liveAttribution);
+      }
       return liveAttribution;
     }
 
@@ -1477,40 +1562,28 @@
     // Fired only after submit-brief returns OK. One shot per page load.
     //
     // No Google Ads conversion label (AW-18224891860/<label>) exists in
-    // this repo. Do not invent one: a conversion hit without a real label
-    // is not an Ads conversion. AW-18224891860 is configured above for tag
-    // diagnostics only. The Ads primary conversion is the GA4 import of
-    // generate_lead, which counts only after the event is a GA4 key event
-    // and the hit is consented (gcs=G111). A denied cookieless ping is
-    // still sent by Consent Mode but is omitted from Realtime/DebugView.
+    // this repo. Do not invent one. The Ads primary conversion is the GA4
+    // import of generate_lead. That import counts a consented hit
+    // (gcs=G111). A denied hit is still sent (gcs=G100, no ad cookies) so
+    // Ads can model it; GA4 Realtime omits that ping.
+    //
+    // The tag drops gbraid/wbraid from the conversion request when a gclid
+    // is also present. The event params below put every click id that
+    // arrived onto the GA4 hit (ep.gclid / ep.gbraid / ep.wbraid) as well
+    // as the document location. Consent is re-applied immediately before
+    // the event so the hit cannot leave while the default is still denied.
     const NEXQ_GA4_ID = 'G-1CBH5JK35Q';
-    const NEXQ_LEAD_READY_MS = 400;
-    const NEXQ_LEAD_CALLBACK_MS = 1000;
+    const NEXQ_LEAD_CALLBACK_MS = 1500;
 
-    function nexqGtagLibraryReady() {
-      const dl = window.dataLayer;
-      return !!(dl && typeof dl.push === 'function' && dl.push !== Array.prototype.push);
-    }
-
-    function waitForGtagLibrary() {
-      return new Promise((resolve) => {
-        const start = Date.now();
-        (function poll() {
-          if (nexqGtagLibraryReady() || Date.now() - start >= NEXQ_LEAD_READY_MS) resolve();
-          else setTimeout(poll, 40);
-        })();
-      });
-    }
-
-    // Queues generate_lead, then waits for gtag's event_callback or a short
-    // timeout. The timeout always wins if the tag is blocked, consent mode
-    // never invokes the callback, or gtag.js has not loaded — the thank-you
-    // screen must not depend on Google.
+    // Queues generate_lead immediately (do not wait for gtag.js — the head
+    // stub preserves command order, and a timer before the queue is how a
+    // slow iPhone drops the hit). Then wait for event_callback or a short
+    // timeout. The thank-you screen must not depend on Google.
     function trackGenerateLeadOnce() {
       if (window.__nexqGenerateLeadFired) return Promise.resolve();
       window.__nexqGenerateLeadFired = true;
 
-      return waitForGtagLibrary().then(() => new Promise((resolve) => {
+      return new Promise((resolve) => {
         let settled = false;
         let timer = 0;
         const done = () => {
@@ -1524,9 +1597,28 @@
         const params = {
           send_to: NEXQ_GA4_ID,
           form_name: 'brief_form',
+          transport_type: 'beacon',
           event_callback: done,
           event_timeout: NEXQ_LEAD_CALLBACK_MS,
         };
+        let clickIds = {};
+        try { clickIds = attributionPayload(); } catch (e) { clickIds = {}; }
+        if (clickIds.gclid) params.gclid = clickIds.gclid;
+        if (clickIds.gbraid) params.gbraid = clickIds.gbraid;
+        if (clickIds.wbraid) params.wbraid = clickIds.wbraid;
+
+        const granted = window.nexqConsentGranted && window.nexqConsentGranted();
+        if (granted) {
+          // Queue the grant before the event. gtag processes the queue in
+          // order, including when this runs before gtag.js has loaded.
+          gtag('consent', 'update', {
+            ad_storage: 'granted',
+            analytics_storage: 'granted',
+            ad_user_data: 'granted',
+            ad_personalization: 'granted',
+          });
+          if (window.nexqWriteClickCookies) window.nexqWriteClickCookies(clickIds);
+        }
 
         try {
           if (typeof gtag === 'function') {
@@ -1541,7 +1633,7 @@
         } catch (e) {
           done();
         }
-      }));
+      });
     }
 
     // ── SUBMIT ─────────────────────────────────────────────────
