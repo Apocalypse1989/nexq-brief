@@ -361,9 +361,10 @@ Deno.serve(async (req) => {
       console.error('submit-brief: skipped deal creation — no contactId resolved');
     }
 
-    // 6. Confirmation email to the client — mirrors the on-screen "Brief
-    // received" copy (index.html screen-4) so the email never promises
-    // anything the UI didn't already say. Sent BEFORE the internal email
+    // 6. Confirmation email to the client. Callback timing matches
+    // nexq.co.uk/start (2 working hours). index.html screen-4 still says
+    // "within 4 hours"; that page 301s to /start and is left as-is.
+    // Sent BEFORE the internal email
     // below so its real send result (Resend can return a 4xx/5xx without
     // fetch() ever rejecting) can be reported there — there's no other
     // log visibility into this from where this was fixed.
@@ -384,13 +385,13 @@ Deno.serve(async (req) => {
   <div style="background:#f8fafc;padding:28px 32px;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px;">
     <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#C9A764;margin:0 0 8px;">Brief received</p>
     <h2 style="font-size:1.375rem;font-weight:700;color:#111827;margin:0 0 16px;">Thank you, ${heClient(first)} — we're on it.</h2>
-    <p style="font-size:0.9375rem;line-height:1.6;color:#374151;margin:0 0 24px;">We'll review your brief within 4 hours. Here's what happens next:</p>
+    <p style="font-size:0.9375rem;line-height:1.6;color:#374151;margin:0 0 24px;">We'll call you back within 2 working hours (Mon–Fri 7:30am–6:30pm, Sat 7:30am–2pm). Here's what happens next:</p>
     <table style="width:100%;border-collapse:collapse;font-size:0.9375rem;">
       <tr>
         <td style="padding:10px 12px 10px 0;color:#C9A764;font-weight:700;vertical-align:top;width:22px;">1</td>
         <td style="padding:10px 0;border-bottom:1px solid #f3f4f6;">
-          <div style="font-weight:600;color:#111827;">We review your brief</div>
-          <div style="color:#6b7280;font-size:0.875rem;margin-top:2px;">Within 4 hours — we check for any gaps and come back with questions if needed</div>
+          <div style="font-weight:600;color:#111827;">We call you back</div>
+          <div style="color:#6b7280;font-size:0.875rem;margin-top:2px;">We'll call you back within 2 working hours (Mon–Fri 7:30am–6:30pm, Sat 7:30am–2pm).</div>
         </td>
       </tr>
       <tr>
