@@ -1,0 +1,16 @@
+# Post-deposit brief. A 200 is a rewrite, so the browser URL and its query
+# string stay on /phase2. Pages applies redirects even when a file exists,
+# so this static rule has to come before the splat or the catch-all wins.
+/phase2       /phase2  200
+
+# Same document today: /phase2/ and /phase2.html 308 to /phase2 and keep
+# the query string (name, email, company). Without these, the splat below
+# would send them to /start. phase2.html is self-contained (inline CSS/JS);
+# it does not request any other file on this host.
+/phase2/      /phase2  308
+/phase2.html  /phase2  308
+
+# Every other path. No query string on the destination, so Pages appends
+# the incoming one (gclid, gbraid, wbraid, utm_*, plan, type, has-website,
+# nexq_consent, and any other parameter).
+/*  https://nexq.co.uk/start  301
